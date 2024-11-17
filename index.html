@@ -8,6 +8,10 @@
         body{
             background-color: rgb(236, 236, 236);
         }
+        *{
+            margin: 0;
+            padding: 0;
+        }
         .warrper{
             margin: auto;
             position: absolute;
@@ -46,42 +50,49 @@
             margin-top: 100px;
             overflow: hidden;
             position: relative;
-            
         }
         .img .card{
             position:absolute;
             left: 0;
             width: 300px;
             height: 100px;
+            text-align: center;
+            line-height: 100px;
+            border-radius: 10px;
             transition: all 0.5s;
         }
         .img .card:first-child{
-            background-color: aqua;
-            
+            background-color: rgba(0, 255, 255, 0.644);
+            left: 0%;
         }
         .img .card:nth-child(2){
-            background-color: red;
+            background-color: rgba(255, 0, 0, 0.612);
             left: 100%;
         }
         .img .card:nth-child(3){
-            background-color: rgb(255, 0, 255);
+            background-color: rgba(255, 0, 255, 0.701);
             left: 200%;
         }
-        .img :hover .card:first-child{
+        .img :hover .card:nth-child(2){
             left: 0%;
         }
         .img .radios{
             display: flex;
             position: absolute;
             bottom: 0;
-            left: 0;
-            transform: translate(50%, 0)
+            left: 80%;
         }
         .img .radio{
             width: 10px;
             height: 10px;
             border-radius: 50%;
-            background-color: rgba(155, 186, 213, 0.452);
+            margin-right: 3px;
+            background-color: rgba(14, 15, 16, 0.224);
+        }
+        .active{
+            width:12px;
+            height: 12px;
+            background-color: rgb(0, 0, 0) !important;
         }
     </style>
 </head>
@@ -92,7 +103,7 @@
         <div class="card"></div>
         <div class="card"></div>
         <div class="radios">
-            <div class="radio"></div>
+            <div class="radio active"></div>
             <div class="radio"></div>
             <div class="radio"></div>
         </div>
@@ -111,4 +122,57 @@
     </div>
        
 </body>
+<script>
+        const cards = document.querySelectorAll('.card')
+        const radios = document.querySelectorAll('.radio')
+        let index = 0
+        function move(){
+            index++
+            if(index > 2){
+                index = 0
+            }
+            cards.forEach((card, i) => {
+                card.style.left = `${(i - index) * 100}%`
+            })
+            radios.forEach((radio, i) => {
+                radio.classList.remove('active')
+                if(i === index){
+                    radio.classList.add('active')
+                }
+            })
+        }
+        var id=setInterval(move, 2000)
+        
+        radios.forEach((radio, i) => {
+            radio.addEventListener('mousemove',function(){
+                index = i
+                cards.forEach((card, i) => {
+                    card.style.left = `${(i - index) * 100}%`
+                })
+                radios.forEach((radio, i) => {
+                    radio.classList.remove('active')
+                    if(i === index){
+                        radio.classList.add('active')
+                    }
+                })
+            clearInterval(id)
+            })
+        })
+        radios.forEach((radio, i) => {
+            radio.addEventListener('mouseleave',function(){
+                index = i
+                cards.forEach((card, i) => {
+                    card.style.left = `${(i - index) * 100}%`
+                })
+                radios.forEach((radio, i) => {
+                    radio.classList.remove('active')
+                    if(i === index){
+                        radio.classList.add('active')
+                    }
+                })
+            id=setInterval(move, 2000)
+            })
+        })
+        
+</script>
 </html>
