@@ -127,12 +127,12 @@
             alert("请输入密码")
         }
         else{
-            save();
+            
             var user_str=localStorage.getItem("user_data");
             var user_data=JSON.parse(user_str);
             if(user_data.name==name.value&&user_data.password==password.value)
         {
-            alert(user_data.name+" "+user_data.password)
+            
             alert("登录成功")
         }
         else{
