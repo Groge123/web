@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SignUP</title>
+    <style>
+       * {
+            margin: 0;
+            padding: 0;
+        }
+        html {
+            height: 100%;
+        }
+        body {
+            height: 100%;
+        }
+        .container {
+            height: 100%;
+            background-image: linear-gradient(to bottom, #fbc2eb, #a6c1ee, #225bbf);
+        }
+        .wrapper{
+            width: 400px;
+            height: 550px;
+            background-color: #fff;
+            border-radius: 5%;
+            margin: 0 auto;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+        .user-wrapper{
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-around;
+        }
+        .header{
+            text-align: center;
+            color: #333;
+            margin-top: 30px;
+            padding-bottom: 10px;
+        }
+        .username,.password{
+            display: flex;
+            justify-content: center;
+        }
+        label{
+            margin-right: 10px;
+            color: #333;
+        }
+        input{
+            width: 200px;
+            height:30px;
+            border: none;
+            box-shadow: 1px 1px 1px 1px #ccc;
+            border-radius: 5%;
+
+        }
+       button{
+            width: 200px;
+            height: 30px;
+            border: none;
+            background-color: #333;
+            color: #fff;
+            border-radius: 5%;
+            margin-top: 30px;
+            margin-left: 100px;
+            cursor: pointer;
+            margin-bottom: 85px;
+
+       }
+       
+       #re-password{
+            margin-right: 20px;
+       }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="wrapper">
+            <div class="header">
+                <h1>Sign Up</h1>
+            </div>
+            <div class="user-wrapper">
+                <div class="username">
+                    <label for="username">Username:</label>
+                    <input type="text" name="username" id="username">
+                </div>
+                <div class="password">
+                    <label for="password">Password:</label>
+                    <input type="password" name="password" id="password">
+                </div>
+                <div class="password">
+                    <label for="password">Re-Password:</label>
+                    <input type="password" name="password" id="re-password">
+                </div>
+                
+            </div>
+            <div class="sign">
+                <a href=""><button>sign_up</button></a>
+            </div>
+           
+        </div>
+
+    </div>
+
+</body>
+<script>
+    const username=document.querySelector("#username")
+    const password=document.querySelector("#password")
+    const rePassword=document.querySelector("#re-password")
+    const btn=document.querySelector("button")
+    const a=document.querySelector("a")
+
+    btn.addEventListener("click",function(){
+        if(username.value===""||password.value===""||rePassword.value===""){
+            alert("请输入完整信息")
+        }else if(password.value!==rePassword.value){
+            alert("两次密码不一致")
+        }else{
+            if(password.value.length<1){
+                alert("密码长度不能小于6位")
+            }
+            else{
+                alert("注册成功")
+                a.href="login.html";
+                save(username,password);
+            }
+        }
+    })
+    function save(name,password)
+        {
+            var old_data=JSON.stringify(localStorage.getItem("user_data"));
+            
+            
+            var data=new Object();
+            var user=new Object();
+            user.password=password.value;
+            user.sign_time=new Date().toLocaleString();
+            data[name.value]=user;
+            if(localStorage.getItem("user_data")==null)
+            {
+                alert("第一次注册");
+                localStorage.setItem("user_data",JSON.stringify(data));
+            }
+            else{
+                localStorage.setItem("user_data",[old_data,JSON.stringify(data)].join(","));
+            }
+
+            alert(JSON.parse(localStorage.getItem("user_data")))
+        }
+</script>
+</html>
