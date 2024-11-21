@@ -110,15 +110,19 @@
 
 </body>
 <script>
-    const username=document.querySelector("#username")
-    const password=document.querySelector("#password")
-    const rePassword=document.querySelector("#re-password")
-    const btn=document.querySelector("button")
-    const a=document.querySelector("a")
-
+    const username=document.querySelector("#username");
+    const password=document.querySelector("#password");
+    const rePassword=document.querySelector("#re-password");
+    const btn=document.querySelector("button");
+    const a=document.querySelector("a");
+    // 尝试从localStorage获取已存在的用户数据
+    var oldData = localStorage.getItem("user_data");
+    
+    alert();
     btn.addEventListener("click",function(){
         if(username.value===""||password.value===""||rePassword.value===""){
             alert("请输入完整信息")
+        
         }else if(password.value!==rePassword.value){
             alert("两次密码不一致")
         }else{
@@ -134,24 +138,30 @@
     })
     function save(name,password)
         {
-            var old_data=JSON.stringify(localStorage.getItem("user_data"));
             
             
-            var data=new Object();
-            var user=new Object();
-            user.password=password.value;
-            user.sign_time=new Date().toLocaleString();
-            data[name.value]=user;
-            if(localStorage.getItem("user_data")==null)
-            {
-                alert("第一次注册");
-                localStorage.setItem("user_data",JSON.stringify(data));
+            // 初始化数据对象
+            var data = {};
+            
+            // 如果存在旧数据，则解析它
+            if (oldData) {
+                data = JSON.parse(oldData);
             }
-            else{
-                localStorage.setItem("user_data",[old_data,JSON.stringify(data)].join(","));
-            }
-
-            alert(JSON.parse(localStorage.getItem("user_data")))
+            
+            // 创建用户对象并设置密码和签名时间
+            var user = {
+                password: password.value,
+                sign_time: new Date().toLocaleString()
+            };
+            
+            // 将用户对象存储在数据对象中，使用用户名作为键
+            data[name.value] = user;
+            
+            // 将更新后的数据对象转换回字符串并存储到localStorage
+            localStorage.setItem("user_data", JSON.stringify(data));
+            
+            // 弹出存储的数据以供检查
+            alert("用户数据已保存:\n" + JSON.stringify(data, null, 2));
         }
 </script>
 </html>
