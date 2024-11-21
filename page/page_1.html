@@ -24,17 +24,33 @@
         margin: auto;
         text-align: center;
     }
-
+    input,button{
+        width: 100px;
+        height: 30px;
+        outline: none;
+        border: 1px solid #ebebeb;
+        padding-left: 5px;
+        box-sizing: border-box;
+        margin-right: 10px;
+    }
+    button{
+        background-color: #721c24;
+        color: #fff;
+        cursor: pointer;
+    }
     table {
         margin: 20px auto;
         width: 700px;
         border-collapse: collapse;
         color: #3c3637;
     }
-    thead:nth-child(2n) td {
+    thead td{
+        background-color: sandybrown;
+    }
+    tbody:nth-child(2n) td:nth-child(2n) {
         background-color: rgba(181, 193, 193, 0.642);
     }
-    thead:nth-child(2n+1) td{
+    tbody:nth-child(2n+1) td:nth-child(2n+1){
         background-color: rgba(97, 100, 100, 0.548);
     }
     td {
@@ -42,6 +58,11 @@
         background: #f2f2f2;
         font-size: 18px;
         text-align: left;
+    }
+    .delete{
+        width: 80px;
+        background-color: #68af67;
+        float: inline-end;
     }
 </style>
 </style>
@@ -54,7 +75,8 @@
             <input type="text" name="name" placeholder="姓名">
             <input type="text" name="age" placeholder="年龄">
             <input type="text" name="count" placeholder="次数">
-            <button>提交</button>
+            <input type="text" name="win" placeholder="胜场数">
+            <button class="submit">提交</button>
         </form>
         
         <table>
@@ -64,11 +86,102 @@
                     <td><a href="#">姓名</a></td>
                     <td><a href="#">年龄</a></td>
                     <td><a href="#">次数</a></td>
+                    <td><a href="#">胜场数</a></td>
+                    <td><a href="#"></a></td>
                 </tr>
             </thead>
-            
-            
         </table>
     </div>
 </body>
+<script>
+    const name=document.querySelector('input[name="name"]');
+    const age=document.querySelector('input[name="age"]');
+    const count=document.querySelector('input[name="count"]');
+    const win=document.querySelector('input[name="win"]');
+    const submit=document.querySelector('.submit');
+    const table=document.querySelector('table');
+    var tbody=document.querySelectorAll('tbody');
+    var del=document.querySelectorAll('.delete');
+    
+    let length=tbody.length;
+
+    const self_data={
+        name:"朋",
+        age:18,
+        count:100,
+        win:50
+    };
+    self_tbody=document.createElement('tbody');
+    _body=`
+        <tr>
+            <td><a href="#">${length+1}</a></td>
+            <td><a href="#">${self_data.name}</a></td>
+            <td><a href="#">${self_data.age}</a></td>
+            <td><a href="#">${self_data.count}</a></td>
+            <td><a href="#">${self_data.win}</a></td>
+            <td><button class="delete" data_id=${length+1}>delete</button></td>
+        </tr>
+    `
+    length=length+1;
+    self_tbody.innerHTML=_body;
+    table.appendChild(self_tbody);
+    load()
+    submit.addEventListener('click',function(e){
+        e.preventDefault();
+        if(!name.value||!age.value||!count.value||!win.value){
+            alert('请输入完整信息');
+            return;
+        }
+        length=length+1;
+        data=`
+            <tr>
+                <td><a href="#">${length}</a></td>
+                <td><a href="#">${name.value}</a></td>
+                <td><a href="#">${age.value}</a></td>
+                <td><a href="#">${count.value}</a></td>
+                <td><a href="#">${win.value}</a></td>
+                <td><button class="delete" data_id=${length}>delete</button></td>
+            </tr>
+        `
+        
+        save(data);
+        temp=document.createElement('tbody');
+        temp.innerHTML=data;
+        table.appendChild(temp);
+    })
+    function save(data)
+    {
+        if (!data) return;
+
+        tbody=document.querySelectorAll('tbody');
+        length=tbody.length+1;
+
+        var old_data = JSON.parse(localStorage.getItem('data')) || [];
+        old_data.push(data);
+        localStorage.setItem('data', JSON.stringify(old_data));
+        del=document.querySelectorAll('.delete');
+    }
+    function load()
+    {
+        var old_data = JSON.parse(localStorage.getItem('data')) || [];
+        for (var i = 0; i < old_data.length; i++) {
+            temp=document.createElement('tbody');
+            temp.innerHTML=old_data[i];
+            table.appendChild(temp);
+        }
+        tbody=document.querySelectorAll('tbody');
+        length=tbody.length;
+
+        del=document.querySelectorAll('.delete');
+    }
+    del.forEach((item,index)=>{
+        item.addEventListener('click',function(e){
+            e.preventDefault();
+            console.log(index);
+            console.log(del[index].getAttribute('data_id'));
+            del[index].parentNode.parentNode.remove();
+            localStorage.removeItem("data",JSON.stringify(del[index].getAttribute('data_id')));
+        })
+    })
+</script>
 </html>
