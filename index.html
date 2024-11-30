@@ -3,205 +3,180 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>别叫我朋哥</title>
+    <title>Test</title>
     <style>
         *{
             margin: 0;
             padding: 0;
         }
-        html{
+        .wrapper{
+            width: 100%;
             height: 100vh;
-            background-image: linear-gradient(to bottom, #fbc2eb, #a6c1ee, #225bbf);
+            background-color: #f0f0f0;
+            position: relative;
         }
-        .warrper{
+        nav{
+            width: 100%;
+            height: 100px;
+            background-color: #000;
+            position:fixed;
+            top: -100px;
+            transition: all 0.5s;
+        }
+        .nav-wrapper{
+            width: 100%;
+            height: 100%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        a{
+            text-decoration: none;
+        }
+        .brand-logo{
+            color: #fff;
+            font-size: 24px;
+            font-weight: 700;
+        }
+        #nav-mobile{
+            display: flex;
+            list-style: none;
+        }
+        #nav-mobile>li{
+            margin-right: 20px;
+            position: relative;
+        }
+        #nav-mobile li a{
+            color: #fff;
+        }
+        .log{
+            position: absolute;
+            width: 100px;
+            background-color: white;
+            border-radius: 10px 10px;
+            opacity: 0;
+            transition: all 0.3s;
+        }
+        .log ul{
+            height: inherit;
+            width: inherit;
+            list-style: none;
+            
+            background-color: rgba(0,0,0,0.5);
+        }
+        .log ul li{
+            display: block;
+            padding: 10px;
+            
+        }
+        .log ul li:hover{
+            
+            background-color: #f0f0f0;
+        }
+        ul li:nth-child(2):hover .log{
+            opacity: 1;
+        }
+
+        .image{
+            width: 100px;
+            height: 100px;
             margin: auto;
             position: absolute;
             top: 50%;
             left: 50%;
-            transform: translate(-50%,-50%);
+            transform: translate(-50%, -50%);
         }
-        h1{
-            text-align: center;
-        }
-        .warrper .btns{
-            display: flex;
-            width: 400px;
-            justify-content:center;
-
-        }
-        .button{
-            width: 100px;
-            height: 100px;
-            margin-left: 20px;
-            text-align: center;
-        }
-        a{
-            border-radius: 10%;
-            background-color: rgb(102, 174, 188);
-            display: block;
-            line-height: 100px;
-            list-style: none;
-            text-decoration: none;
-            color: white;
-        }
-        .img{
-            width: 300px;
-            height: 100px;
-            margin: auto;
-            margin-top: 100px;
-            overflow: hidden;
-            position: relative;
-        }
-        .img .card{
-            position:absolute;
-            left: 0;
-            width: 300px;
-            height: 100px;
-            text-align: center;
-            font:16px "微软雅黑" black;
-            line-height: 100px;
-            border-radius: 10px;
-            transition: all 0.5s;
-        }
-        .img .card textarea{
+        .image img{
             width: 100%;
             height: 100%;
-            border-radius: inherit;
-            background-color: inherit;
-            border: none;
-            outline: none;
-            resize: none;
-        }
-        .img .card:first-child{
-            background-color: rgba(0, 255, 255, 0.644);
-            left: 0%;
-        }
-        .img .card:nth-child(2){
-            background-color: rgba(255, 0, 0, 0.612);
-            left: 100%;
-        }
-        .img .card:nth-child(3){
-            background-color: rgba(255, 0, 255, 0.701);
-            left: 200%;
-        }
-        .img :hover .card:nth-child(2){
-            left: 0%;
-        }
-        .img .radios{
-            display: flex;
-            position: absolute;
-            bottom: 0;
-            left: 80%;
-            z-index: 999;
-        }
-        .img .radio{
-            width: 10px;
-            height: 10px;
             border-radius: 50%;
-            margin-right: 3px;
-            background-color: rgba(14, 15, 16, 0.224);
+            transition: all 1s;
         }
-        .active{
-            width:12px;
-            height: 12px;
-            background-color: rgb(0, 0, 0) !important;
+        .image h1{
+            text-align: center;
+            font-size: 24px;
+            font-weight: 700;
+            margin-top: 20px;
+        }
+        .image img:hover{
+            transform: scale(1.1) rotate(360deg);
+        }
+        .button  a{
+            width:200px;
+            height: 50px;
+            display: block;
+            background-color: rgb(192, 231, 255);
+            margin: 50px auto; 
+            font-size: 20px;
+            line-height: 50px;
+            text-align: center;
+            border-radius: 10px;
+            color: #000000
         }
     </style>
 </head>
-
 <body>
-    <div class="img">
-        <div class="card">
-            <textarea name="" id="">简介</textarea>
+    <div class="wrapper">
+        <nav>
+            <div class="nav-wrapper">
+                <a href="#" class="brand-logo">groge</a>
+                <ul id="nav-mobile" class="right hide-on-med-and-down">
+                    <li><a href="#">记事本</a></li>
+                    <li><a href="#">别点</a>
+                        <div class="log">
+                            <ul>
+                                <li><a href="#">你</a></li>
+                                <li><a href="#">朋</a></li>
+                                <li><a href="#">哥</a></li>
+                            </ul>
+                        </div>
+                    </li>
+                    <li><a href="#">广告位</a></li>
+                </ul>
+            </div>
+        </nav>
+        <div class="image">
+            <a href="#">
+                <img src="asset/fat_man.png" alt="">
+            </a>
+            <h1 id="current_time">
+
+            </h1>
         </div>
-        <div class="card">
-            <textarea name="" id="">版本0.001</textarea>
-        </div>
-        <div class="card">
-            <textarea name="" id="">事件</textarea>
-        </div>
-        <div class="radios">
-            <div class="radio active"></div>
-            <div class="radio"></div>
-            <div class="radio"></div>
+    </div>
+    <div class="content">
+        <div class="button">
+            <div class="login">
+                <a href="login.html">
+                    <i>login</i>
+                </a>
+            </div>
+            <div class="login">
+                <a href="snack.html">
+                    <i>snack</i>
+                </a>
+            </div>
         </div>
         
+
     </div>
-    <div class="warrper">
-        <h1>朋哥</h1>
-        <div class="btns">
-            <div class="button">
-                <a href="login.html">Login</a>
-            </div>
-            <div class="button">
-                <a href="snake.html">snake</a>
-            </div>
-        </div>
-            
-    </div>
-    
-    
 </body>
 <script>
-        const cards = document.querySelectorAll('.card')
-        const radios = document.querySelectorAll('.radio')
-        let index = 0
-        function move(){
-            index++
-            if(index > 2){
-                index = 0
-            }
-            cards.forEach((card, i) => {
-                card.style.left = `${(i - index) * 100}%`
-            })
-            radios.forEach((radio, i) => {
-                radio.classList.remove('active')
-                if(i === index){
-                    radio.classList.add('active')
-                }
-            })
+    const img=document.querySelector('img');
+    const nav=document.querySelector('nav');
+    const time=document.querySelector('#current_time');
+    //向下滑nav出现在顶部，向上滑nav消失
+    window.addEventListener('scroll',()=>{
+        if(window.scrollY>0){
+            nav.style.top=0;
+            img.style.transform='rotate('+360+'deg)';
+        }else{
+            nav.style.top='-100px';
+            img.style.transform='rotate('+0+'deg)';
         }
-        var id=setInterval(move, 2000)
-        
-        radios.forEach((radio, i) => {
-            radio.addEventListener('mousemove',function(){
-                index = i
-                cards.forEach((card, i) => {
-                    card.style.left = `${(i - index) * 100}%`
-                })
-                radios.forEach((radio, i) => {
-                    radio.classList.remove('active')
-                    if(i === index){
-                        radio.classList.add('active')
-                    }
-                })
-            clearInterval(id)
-            })
-            radio.addEventListener('mouseleave',function(){
-                index = i
-                cards.forEach((card, i) => {
-                    card.style.left = `${(i - index) * 100}%`
-
-                })
-                radios.forEach((radio, i) => {
-                    radio.classList.remove('active')
-                    if(i === index){
-                        radio.classList.add('active')
-                    }
-                })
-                clearInterval(id);
-            id=setInterval(move, 2000)
-            })
-        })
-
-        cards.forEach((card, i) => {
-            card.addEventListener('click',function(){
-                clearInterval(id);
-            })
-            card.addEventListener('mouseleave',function(){
-                clearInterval(id);
-            id=setInterval(move, 2000)
-        })
-        })
+    })
+    setInterval(() => {
+        time.innerHTML=new Date().toLocaleTimeString();
+    },1000);
 </script>
 </html>
