@@ -5,364 +5,903 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>notepad</title>
     <style>
-    * {  
-        box-sizing: border-box;  
-        margin: 0;  
-        padding: 0;  
-    }  
-
-    body {  
-        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;  
-        background: linear-gradient(135deg, #e3f2fd, #bbdefb);  
-        display: flex;  
-        justify-content: center;  
-        align-items: center;  
-        height: 100vh;
-        color: #333;  
-        transition: background-color 0.4s;
-    }  
-
-    body.dark-theme {  
-        background: linear-gradient(135deg, #2b2c35, #34495e);  
-    }  
-
-    .notebook {  
-        max-width: 800px;  
-        width: 90%;  
-        padding: 30px;  
-        background: #ffffff;  
-        box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);  
-        border-radius: 12px;  
-        position: relative;  
-    }  
-
-    h1, h2 {  
-        text-align: center;  
-        margin-bottom: 20px;  
-        color: #3f51b5;  
-    }  
-
-    button {  
-        padding: 12px 20px;  
-        border: none;  
-        background-color: #3f51b5;  
-        color: white;  
-        border-radius: 5px;  
-        font-size: 16px;  
-        cursor: pointer;  
-        transition: all 0.3s ease, transform 0.2s ease;  
-    }  
-
-    button:hover {  
-        background-color: #5c6bc0;  
-        transform: translateY(-2px);  
-    }  
-
-    .side-buttons {  
-        position: absolute;  
-        top: 30px;  
-        right: 30px;  
-        display: flex;  
-        flex-direction: column;  
-        gap: 10px;  
-    }  
-
-    .page {  
-        margin-top: 20px;  
-    }  
-
-    .input-section,  
-    .search-section {  
-        background-color: rgba(255, 255, 255, 0.9);  
-        padding: 20px;  
-        border-radius: 10px;  
-        margin-bottom: 20px;  
-        box-shadow: 0 2px 15px rgba(33, 37, 41, 0.1);  
-    }  
-
-    .input-section h2,  
-    .search-section h2 {  
-        margin-bottom: 15px;  
-        color: #3f51b5;  
-    }  
-
-    input[type="date"],  
-    input[type="text"],  
-    select {  
-        width: 100%;  
-        padding: 10px;  
-        border-radius: 5px;  
-        border: 1px solid #ddd;  
-        margin-bottom: 15px;  
-        transition: border-color 0.3s ease;  
-    }  
-
-    input:focus,  
-    select:focus {  
-        border-color: #3f51b5;  
-        outline: none;  
-    }  
-
-    .select-group {  
-        display: flex;  
-        justify-content: space-between;  
-    }  
-
-    ul {  
-        list-style-type: none;  
-        padding: 0;  
-    }  
-
-    li {  
-        background: #fff;  
-        margin-bottom: 10px;  
-        padding: 12px 15px;  
-        border-radius: 8px;  
-        border-left: 4px solid #3f51b5;  
-        transition: all 0.3s;  
-        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);  
-        justify-content: space-between; 
-    }  
-
-    li:hover {  
-        background: #f0f0f0;  
-    }  
-
-    body.dark-theme .notebook {  
-        background-color: #34495e;  
-    }  
-
-    body.dark-theme button {  
-        background-color: #5a8dee;  
-    }  
-
-    body.dark-theme button:hover {  
-        background-color: #4a76cc;  
-    }  
-
-    body.dark-theme input[type="date"],  
-    body.dark-theme input[type="text"],  
-    body.dark-theme select {  
-        background-color: #545a67;  
-        color: #ddd;  
-        border-color: #666;  
-    }  
-
-    body.dark-theme h1,  
-    body.dark-theme h2,  
-    body.dark-theme li {  
-        color: #ddd;  
+            * {
+      margin: 0;
+      padding: 0;
+      border: 0;
+      list-style: none;
+     }
+    header {
+      position: relative;
+      width: 100%;
+      height: 50px;
+      color: rgb(175, 171, 171);
+      background-color: rgb(27, 27, 27);
+      transition: all .5s;
+      z-index: 2;
+      text-align: center;
+      line-height: 50px;
+      letter-spacing: 3px;
     }
+    #clearAll {
+      width: 30px;
+      height: 30px;
+      position: absolute;
+      right: 20px;
+      top: 10px;
+      cursor: pointer;
+    }
+    #clearAll  path {
+      fill: #ccc;
+    }
+    #clearAll:hover path {
+      fill: #fff;
+    }
+    .notebox {
+      width: 100%;
+      height: calc(100vh);
+      background: #cccccc7f;
+      position: relative;
+    }
+    .notebox {
+      overflow: hidden;
+    }
+    #button {
+      width: 320px;
+      height: 60px;
+      position: relative;
+      cursor: pointer;
+      transition: all 1s;
+      border: 1px solid black;
+      border-radius: 10px;
+      position: fixed;
+      bottom: 105px;
+    }
+    #button .border {
+      stroke-dasharray: 150 470;
+      stroke-dashoffset: -470;
+      stroke-width: 8px;
+      stroke: black;
+      fill: transparent;
+      transition: all 1s;
+    }
+    #button .content {
+      width: 320px;
+      height: 60px;
+      position: absolute;
+      letter-spacing: 3px;
+      text-align: center;
+      line-height: 60px;
+      font-size: 20px;
+      font-weight: 700;
+      top: 0;
+      pointer-events: none;
+      border-radius: 10px;
+      transition: all 1s;
+    }
+    #button .border:hover {
+      stroke-width: 2px;
+      stroke-dashoffset: 0;
+      stroke-dasharray: 760;
+    }
+    #button:hover {
+      border: none;
+    }
+    #button:hover .content {
+      background: pink;
+      color: #fff;
+    }
+    #add,
+    #delete {
+      width: 150px;
+      height: 60px;
+      position: relative;
+      cursor: pointer;
+      transition: all 1s;
+      border: 1px solid black;
+      border-radius: 10px;
+      position: fixed;
+      bottom: 105px;
+      right: 20%;
+      z-index: 900;
+    }
+    #delete {
+      left: 20%;
+    }
+    #add .border,
+    #delete .border {
+      stroke-dasharray: 60 255;
+      stroke-dashoffset: -255;
+      stroke-width: 8px;
+      stroke: black;
+      fill: transparent;
+      transition: all 1s;
+    }
+    #add .content,
+    #delete .content {
+      width: 150px;
+      height: 60px;
+      position: absolute;
+      letter-spacing: 3px;
+      text-align: center;
+      line-height: 60px;
+      font-size: 20px;
+      font-weight: 700;
+      top: 0;
+      pointer-events: none;
+      border-radius: 10px;
+      transition: all 1s;
+    }
+    #add .border:hover,
+    #delete .border:hover {
+      stroke-width: 2px;
+      stroke-dashoffset: 0;
+      stroke-dasharray: 420;
+    }
+    #add:hover,
+    #delete:hover {
+      border: none;
+    }
+    #add:hover .content,
+    #delete:hover .content {
+      background: pink;
+      color: #fff;
+    }
+    #text-length {
+      width: 15%;
+      height: 40px;
+      text-align: right;
+      line-height: 40px;
+      position: absolute;
+      right: 8%;
+      bottom: 90px;
+      color: #959393;
+    }
+    .notebox .notedata {
+      width: 300%;
+      height: 100%;
+      display: flex;
+      align-items: center;
+    }
+    .notedata div {
+      width: 400px;
+      height: 560px;
+      box-sizing: border-box;
+      position: relative;
+      position: absolute;
+      left: calc(100vw);
+      transition: all .5s;
+      transition-timing-function: ease-out;
+    }
+    @media screen and (min-device-width:1500px) {
+      .notebox .notedata .textselected-1 {
+        left: 5%;
+      }
+    }
+    @media screen and (min-device-width:1600px) {
+      .notebox .notedata .textselected-1 {
+        left: 7%;
+      }
+    }
+    @media screen and (min-device-width:1700px) {
+      .notebox .notedata .textselected-1 {
+        left: 8%;
+      }
+    }
+    @media screen and (min-device-width:1800px) {
+      .notebox .notedata .textselected-1 {
+        left: 9%;
+      }
+    }
+    @media screen and (min-device-width:1900px) {
+      .notebox .notedata .textselected-1 {
+        left: 10%;
+      }
+    }
+    @media screen and (min-device-width:2000px) {
+      .notebox .notedata .textselected-1 {
+        left: 11%;
+      }
+    }
+    .notebox .notedata .textselected-3 {
+      left: 70%;
+    }
+    .notebox .notedata .textselected-2 {
+      width: 500px;
+      height: 700px;
+    }
+    .notebox .notedata div h2 {
+      position: absolute;
+      top: 15px;
+      text-align: center;
+      line-height: 30px;
+      width: 100%;
+      height: 30px;
+      z-index: 888;
+    }
+    .notebox .notedata .notetime,
+    .notebox .notedata .notenum {
+      width: 50%;
+      height: 30px;
+      text-align: center;
+      line-height: 30px;
+      position: absolute;
+      top: 55px;
+    }
+    .notebox .notedata .notetime {
+      left: 0;
+    }
+    .notebox .notedata .notenum {
+      right: 0;
+    }
+    .notebox .notedata .page {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      text-align: center;
+      line-height: 500px;
+      font-size: 150px;
+      opacity: .1;
+    }
+    .notebox .notedata div textarea {
+      width: 100%;
+      height: 100%;
+      resize: none;
+      outline: none;
+      opacity: 0.6;
+      padding: 80px 20px 0 20px;
+      box-sizing: border-box;
+      line-height: 2.5;
+      text-indent: 2em;
+    }
+    .notebox .next,
+    .notebox .prev {
+      width: 80px;
+      height: 120px;
+      position: absolute;
+      top: 340px;
+      display: flex;
+      align-items: center;
+      cursor: pointer;
+      z-index: 999;
+    }
+    .notebox .next:hover path,
+    .notebox .prev:hover path {
+      fill: #fff;
+    }
+    .notebox .next:hover,
+    .notebox .prev:hover {
+      background: rgba(26, 25, 25, 0.597);
+    }
+    .notebox .next {
+      right: 0;
+    }
+    .notebox .noteaddbox {
+      width: 100%;
+      height: 100%;
+      background: rgba(55, 55, 55, .6);
+      position: relative;
+      position: fixed;
+      top: 0;
+      left: 0;
+      z-index: 9999;
+      display: none;
+    }
+    .notebox .noteaddbox div {
+      width: 60%;
+      height: 600px;
+      background: rgb(255, 255, 255);
+      border-radius: 8px;
+      margin: 150px auto;
+      position: relative;
+    }
+    .notebox .noteaddbox input[type='text'] {
+      width: 50%;
+      height: 50px;
+      background: #c0bebe5d;
+      outline: none;
+      padding-left: 15px;
+      box-sizing: border-box;
+      position: absolute;
+      left: 25%;
+      top: 20px;
+      border-radius: 8px;
+      text-align: center;
+    }
+    .notebox .noteaddbox div textarea {
+      width: 80%;
+      background: #c0bebe5d;
+      height: 400px;
+      outline: none;
+      border-radius: 8px;
+      resize: none;
+      position: absolute;
+      left: 10%;
+      top: 100px;
+      box-sizing: border-box;
+      padding: 15px;
+      line-height: 1.5;
+    }
+    .notebox .noteaddbox .text-length {
+      width: 30%;
+      height: 40px;
+      line-height: 40px;
+      text-align: right;
+      position: absolute;
+      bottom: 65px;
+      right: 11%;
+      color: #959393;
+    }
+    .notebox .noteaddbox button {
+      width: 15%;
+      height: 40px;
+      cursor: pointer;
+      border-radius: 8px;
+      font-size: 15px;
+      position: absolute;
+      bottom: 30px;
+    }
+    .notebox .noteaddbox .false {
+      left: 30%;
+    }
+    .notebox .noteaddbox .true {
+      right: 30%;
+    }
+    .notebox .noteaddbox button:hover {
+      background: #ccccccad;
+    }
+    .notedata div #noteDelbox {
+      position: absolute;
+      width: 28px;
+      height: 28px;
+      top: 8px;
+      z-index: 999;
+      cursor: pointer;
+      left: 87%;
+      opacity: 0;
+      transition: all .5s;
+      pointer-events: none;
+    }
+    #noteDel {
+      width: 100%;
+      height: 100%;
+    }
+    #noteDel:hover path {
+      fill: red;
+    }
+    .note #alter {
+      position: relative;
+      position: absolute;
+      width: 80px;
+      height: 30px;
+      top: 8px;
+      z-index: 999;
+      left: 5%;
+      transition: all .5s;
+    }
+    .note #alter #alterText {
+      width: 25px;
+      height: 25px;
+      cursor: pointer;
+      position: absolute;
+    }
+    .note #alter #saving {
+      width: 23px;
+      float: left;
+      height: 23px;
+      position: absolute;
+      left: 30px;
+      cursor: pointer;
+      top: 2px;
+    }
+    #alterText:hover path {
+      fill: red;
+    }
+    #saving:hover path {
+      fill: #19fa28;
+    }
+    .clearNull,
+    .clearbox {
+      width: 100%;
+      height: 100%;
+      background: rgba(55, 55, 55, .6);
+      position: relative;
+      position: fixed;
+      top: 0;
+      left: 0;
+      z-index: 9999;
+      display: none;
+     }
+     .clearNull div,
+     .clearbox div {
+      width: 60%;
+      height: 400px;
+      background: rgb(255, 255, 255);
+      border-radius: 8px;
+      margin: 150px auto;
+      position: relative;
+    }
+     .clearNull div p,
+     .clearbox div p {
+      width: 100%;
+      height: 50px;
+      text-align: center;
+      line-height: 50px;
+      color: red;
+      font-weight: 600;
+      letter-spacing: 3px;
+      margin-top: 80px;
+      float: left;
+    }
+     .clearbox button {
+      width: 15%;
+      height: 40px;
+      cursor: pointer;
+      border-radius: 8px;
+      font-size: 15px;
+      position: absolute;
+      bottom: 80px;
+    }
+     .clearbox .clearF {
+      left: 30%;
+    }
+     .clearbox .clearT {
+      right: 30%;
+      background: black;
+      color: #fff;
+    }
+     .clearbox .clearT:hover {
+      background: rgba(255, 0, 0, 0.804);
+    }
+     .clearbox button:hover {
+      background: #ccccccad;
+    }
+     .clearNull button {
+      width: 15%;
+      height: 40px;
+      cursor: pointer;
+      border-radius: 8px;
+      font-size: 15px;
+      position: absolute;
+      bottom: 80px;
+      left: 42.5%;
+      background: #000;
+      color: #fff;
+    }
+     .clearNull button:hover {
+      background: #464545aa;
+    }
+    footer {
+      width: 100%;
+      height: 50px;
+      color: rgb(175, 171, 171);
+      background-color: rgb(27, 27, 27);
+      text-align: center;
+      line-height: 50px;
+      letter-spacing: 3px;
+    }
+
     </style>
 </head>
 <body>
-    <div class="notebook">  
-        <div class="container">  
-            <h1>记事本</h1>  
-            <button id="themeToggle">切换主题</button>  
-            <div class="side-buttons">  
-                <button class="nav-button" id="exportNotes">导出事件</button>  
-                <button class="nav-button" id="printNotes">打印事件</button>  
-            </div>  
-            <div class="page">  
-                <div class="input-section">  
-                    <h2>添加新事件</h2>  
-                    <input type="date" id="dateInput" />  
-                    <input type="text" id="eventInput" placeholder="输入事件..." />  
-                    <div class="select-group">  
-                        <select id="categorySelect">  
-                            <option value="工作">工作</option>  
-                            <option value="学习">学习</option>  
-                            <option value="个人">个人</option>  
-                        </select>  
-                        <select id="prioritySelect">  
-                            <option value="高">高优先级</option>  
-                            <option value="中">中优先级</option>  
-                            <option value="低">低优先级</option>  
-                        </select>  
-                    </div>  
-                    <button id="addButton">添加事件</button>  
-                </div>  
-
-                <div class="search-section">  
-                    <h2>我的记事</h2>  
-                    <input type="text" id="searchInput" placeholder="搜索事件..." />  
-                    <ul id="notesList"></ul>  
-                </div>  
-            </div>  
-        </div>  
-    </div>  
+    <header>
+        MY NOTEBOOK
+        <span id="clearAll">
+          <svg t="1704439198763" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg"
+            p-id="4779">
+            <path
+              d="M607.897867 768.043004c-17.717453 0-31.994625-14.277171-31.994625-31.994625L575.903242 383.935495c0-17.717453 14.277171-31.994625 31.994625-31.994625s31.994625 14.277171 31.994625 31.994625l0 351.94087C639.892491 753.593818 625.61532 768.043004 607.897867 768.043004z"
+              fill="#ccc" p-id="4780"></path>
+            <path
+              d="M415.930119 768.043004c-17.717453 0-31.994625-14.277171-31.994625-31.994625L383.935495 383.935495c0-17.717453 14.277171-31.994625 31.994625-31.994625 17.717453 0 31.994625 14.277171 31.994625 31.994625l0 351.94087C447.924744 753.593818 433.647573 768.043004 415.930119 768.043004z"
+              fill="#ccc" p-id="4781"></path>
+            <path
+              d="M928.016126 223.962372l-159.973123 0L768.043004 159.973123c0-52.980346-42.659499-95.983874-95.295817-95.983874L351.94087 63.989249c-52.980346 0-95.983874 43.003528-95.983874 95.983874l0 63.989249-159.973123 0c-17.717453 0-31.994625 14.277171-31.994625 31.994625s14.277171 31.994625 31.994625 31.994625l832.032253 0c17.717453 0 31.994625-14.277171 31.994625-31.994625S945.73358 223.962372 928.016126 223.962372zM319.946246 159.973123c0-17.545439 14.449185-31.994625 31.994625-31.994625l320.806316 0c17.545439 0 31.306568 14.105157 31.306568 31.994625l0 63.989249L319.946246 223.962372 319.946246 159.973123 319.946246 159.973123z"
+              fill="#ccc" p-id="4782"></path>
+            <path
+              d="M736.048379 960.010751 288.123635 960.010751c-52.980346 0-95.983874-43.003528-95.983874-95.983874L192.139761 383.591466c0-17.717453 14.277171-31.994625 31.994625-31.994625s31.994625 14.277171 31.994625 31.994625l0 480.435411c0 17.717453 14.449185 31.994625 31.994625 31.994625l448.096758 0c17.717453 0 31.994625-14.277171 31.994625-31.994625L768.215018 384.795565c0-17.717453 14.277171-31.994625 31.994625-31.994625s31.994625 14.277171 31.994625 31.994625l0 479.231312C832.032253 916.835209 789.028725 960.010751 736.048379 960.010751z"
+              fill="#ccc" p-id="4783"></path>
+          </svg>
+        </span>
+      </header>
+      <div class="notebox">
+        <div class="prev">
+          <svg t="1704694833950" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg"
+            p-id="1613">
+            <path
+              d="M614.213818 71.819636a58.181818 58.181818 0 0 1 77.940364 86.318546l-3.095273 2.792727-379.880727 319.092364a34.909091 34.909091 0 0 0-4.282182 49.198545l1.861818 2.024727 1.978182 1.861819 381.021091 330.589091A58.181818 58.181818 0 0 1 616.750545 954.181818l-3.258181-2.629818L232.494545 621.032727a151.272727 151.272727 0 0 1-2.56-226.280727l4.398546-3.816727L614.213818 71.819636z"
+              fill="#afabab" p-id="1614"></path>
+          </svg>
+        </div>
+        <div class="next"><svg t="1704694813200" class="icon" viewBox="0 0 1024 1024" version="1.1"
+            xmlns="http://www.w3.org/2000/svg" p-id="1407">
+            <path
+              d="M392.308364 71.819636a58.181818 58.181818 0 0 0-77.917091 86.318546l3.072 2.792727 379.904 319.092364a34.909091 34.909091 0 0 1 4.258909 49.198545l-1.838546 2.024727-2.001454 1.861819L316.741818 863.720727A58.181818 58.181818 0 0 0 389.818182 954.181818l3.234909-2.629818 380.997818-330.542545a151.272727 151.272727 0 0 0 2.56-226.280728l-4.375273-3.816727L392.308364 71.819636z"
+              fill="#afabab" p-id="1408"></path>
+          </svg>
+        </div>
+        <div id="add">
+          <svg width="150px" height="60px">
+            <rect class="border" width="150px" height="60px"></rect>
+            <div class="content">ADD</div>
+          </svg>
+        </div>
+        <div id="delete">
+          <svg width="150px" height="60px">
+            <rect class="border" width="150px" height="60px"></rect>
+            <div class="content">DELETE</div>
+          </svg>
+        </div>
+        <div class="noteaddbox">
+          <div>
+            <input type="text" placeholder="标题 【最多输入10个字符】【生成标题自动去除空格】 (必填)" maxlength="10">
+            <textarea name="" id="" cols="30" rows="10" placeholder="笔记正文 【生成的笔记文本内容自动去除空格】 (必填)"></textarea>
+            <p class="text-length">0个字符</p>
+            <button class="false">取消</button>
+            <button class="true">确定</button>
+          </div>
+        </div>
+        <div class="notedata"></div>
+        <div class="clearNull">
+          <div>
+            <p>未检测到用户存储数据，本地存储数据为空！</p>
+            <button class="nullEsc">确定</button>
+          </div>
+        </div>
+        <div class="clearbox">
+          <div>
+            <p>删除的数据无法进行恢复，是否确定删除平台本地存储的所有用户数据？</p>
+            <button class="clearF">取消</button>
+            <button class="clearT" disabled>确定(10)</button>
+          </div>
+        </div>
+      </div>
+      <footer>
+        Create By No.ever.
+      </footer>
+    
 </body>
 <script>
-    let currentPage = 1;  
-    const date=document.getElementById('dateInput');
-    date.valueAsDate = new Date();
-    // 初始化记事本  
-    function loadNotes() {  
-        const notesList = JSON.parse(localStorage.getItem('notesList')) || [];  
-        const notesListPage1 = document.getElementById('notesList');  
-        const notesListPage2 = document.getElementById('notesListPage2');  
+     const left = document.querySelector('.prev')
+    const right = document.querySelector('.next')
+    left.style.top = right.style.top = `${(window.innerHeight - 120) / 2}px`
 
-        notesListPage1.innerHTML = '';  
-        notesListPage2.innerHTML = '';  
-        
-        notesList.forEach((note, index) => {  
-            appendNoteToList(note, index, notesListPage1);  
-            appendNoteToList(note, index, notesListPage2);  
-        });  
-    }  
+    let Ndata = []
+    let noteData = JSON.parse(localStorage.getItem('noteData'))
 
-    // 追加事件到列表  
-    function appendNoteToList(note, index, list) {  
-        const listItem = document.createElement('li');  
-        listItem.textContent = `${note.date} (${note.category}, ${note.priority}): ${note.event}`;  
-        
-        const editButton = document.createElement('button');  
-        editButton.textContent = '编辑';  
-        editButton.style.marginLeft = '10px';  
-        editButton.onclick = () => editNote(index);  
-        listItem.appendChild(editButton);  
+    const noteAddBtn = document.querySelector('#add')
+    const noteDeleteBtn = document.querySelector('#delete')
+    const noteAddBox = document.querySelector('.noteaddbox')
+    const addFalse = document.querySelector('.false')
+    const addTrue = document.querySelector('.true')
+    const noteText = document.querySelector('textarea')
+    const notenum = document.querySelector('.text-length')
+    const noteTitle = document.querySelector('input[type=text]')
+    const noteTextbox = document.querySelector('.notedata')
 
-        const deleteButton = document.createElement('button');  
-        deleteButton.textContent = '删除';  
-        deleteButton.style.marginLeft = '10px';  
-        deleteButton.onclick = () => deleteNote(index);  
-        listItem.appendChild(deleteButton);  
-
-        list.appendChild(listItem);  
-    }  
-
-    // 添加事件到列表  
-    document.addEventListener('DOMContentLoaded', function () {  
-        // 加载记事  
-        loadNotes();  
-
-        // 添加事件按钮  
-        document.getElementById('addButton').addEventListener('click', function () {  
-            const dateInput = document.getElementById('dateInput').value;  
-            const eventInput = document.getElementById('eventInput').value;  
-            const categoryInput = document.getElementById('categorySelect').value;  
-            const priorityInput = document.getElementById('prioritySelect').value;  
-
-            if (addNoteToList(dateInput, eventInput, categoryInput, priorityInput)) {  
-                document.getElementById('dateInput').value = '';  
-                document.getElementById('eventInput').value = '';  
-            }  
-        });  
-
-        // 事件搜索功能  
-        document.getElementById('searchInput').addEventListener('input', function () {  
-            const filter = this.value.toLowerCase();  
-            const notesList = JSON.parse(localStorage.getItem('notesList')) || [];  
-            const filteredNotes = notesList.filter(note => note.event.toLowerCase().includes(filter));  
-
-            displayNotes(filteredNotes);  
-        });  
-
-        // 导出和打印按钮  
-        document.getElementById('exportNotes').addEventListener('click', exportNotes);  
-        document.getElementById('printNotes').addEventListener('click', printNotes);  
-
-        // 切换主题  
-        document.getElementById('themeToggle').addEventListener('click', function () {  
-            document.body.classList.toggle('dark-theme');  
-        });  
-    });  
-
-    // 加载记事  
-    function loadNotes() {  
-        const notesList = JSON.parse(localStorage.getItem('notesList')) || [];  
-        displayNotes(notesList);  
-    }  
-
-
-    // 显示记事  
-    function displayNotes(notesList) {  
-        const notesListElement = document.getElementById('notesList');  
-        notesListElement.innerHTML = '';  
-        notesList.forEach((note, index) => {  
-            const listItem = document.createElement('li');  
-            listItem.style.display = 'flex'; // 使用 Flexbox 布局  
-            listItem.style.justifyContent = 'space-between'; // 使内容两边对齐  
-            
-            listItem.innerHTML = `${note.date} (${note.category}, ${note.priority}): ${note.event}`;  
-            
-            const buttonContainer = document.createElement('div'); // 创建一个容器来装按钮  
-            buttonContainer.style.display = 'flex'; // 使用 Flexbox 布局  
-            buttonContainer.style.gap = '10px'; // 按钮之间的间距  
-
-            // 添加编辑按钮  
-            const editButton = document.createElement('button');  
-            editButton.textContent = '编辑';  
-            editButton.onclick = () => editNote(index);  
-            buttonContainer.appendChild(editButton);  
-
-            // 添加删除按钮  
-            const deleteButton = document.createElement('button');  
-            deleteButton.textContent = '删除';  
-            deleteButton.onclick = () => deleteNote(index);  
-            buttonContainer.appendChild(deleteButton);  
-
-            listItem.appendChild(buttonContainer); // 将按钮容器添加到列表项  
-            notesListElement.appendChild(listItem); // 将列表项添加到列表  
-        });  
-    }  
-
-
-    // 添加事件  
-    function addNoteToList(dateInput, eventInput, categoryInput, priorityInput) {  
-        if (dateInput && eventInput) {  
-            const note = { date: dateInput, event: eventInput, category: categoryInput, priority: priorityInput };  
-            const notesList = JSON.parse(localStorage.getItem('notesList')) || [];  
-            notesList.push(note);  
-            localStorage.setItem('notesList', JSON.stringify(notesList));  
-            displayNotes(notesList);  
-            return true;  
-        } else {  
-            alert('请填写日期和事件。');  
-            return false;  
-        }  
-    }  
-
-    // 编辑事件  
-    function editNote(index) {  
-        const notesList = JSON.parse(localStorage.getItem('notesList')) || [];  
-        const note = notesList[index];  
-        document.getElementById('dateInput').value = note.date;  
-        document.getElementById('eventInput').value = note.event;  
-        document.getElementById('categorySelect').value = note.category;  
-        document.getElementById('prioritySelect').value = note.priority;  
-
-        deleteNote(index);  
-    }  
-
-    // 删除事件  
-    function deleteNote(index) {  
-        const notesList = JSON.parse(localStorage.getItem('notesList')) || [];  
-        notesList.splice(index, 1);  
-        localStorage.setItem('notesList', JSON.stringify(notesList));  
-        displayNotes(notesList);  
-    }  
-
-    // 导出事件为文本文件  
-    function exportNotes() {  
-        const notesList = JSON.parse(localStorage.getItem('notesList')) || [];  
-        const notesText = notesList.map(note => `${note.date} (${note.category}, ${note.priority}): ${note.event}`).join('\n');  
-        const blob = new Blob([notesText], { type: 'text/plain' });  
-        const link = document.createElement('a');  
-        link.href = URL.createObjectURL(blob);  
-        link.download = 'notes.txt';  
-        link.click();  
-    }  
-
-    // 打印事件  
-    function printNotes() {  
-        const notesList = JSON.parse(localStorage.getItem('notesList')) || [];  
-        const notesText = notesList.map(note => `${note.date} (${note.category}, ${note.priority}): ${note.event}`).join('\n');  
-        const printWindow = window.open('', '', 'height=400,width=600');  
-        printWindow.document.write('<pre>' + notesText + '</pre>');  
-        printWindow.document.close();  
-        printWindow.print();  
+    if (noteData === null) {
+      localStorage.setItem('noteData', JSON.stringify(Ndata))
+      noteData = JSON.parse(localStorage.getItem('noteData'))
+    } else {
+      noteCommon()
     }
+
+    const noteDivs = document.querySelectorAll('.notebox .note')
+    if (noteDivs.length >= 3) {
+      noteDivs[0].classList.add('textselected-1')
+      noteDivs[1].style.left = `${(window.innerWidth - 500) / 2}px`
+      noteDivs[1].classList.add('textselected-2')
+      noteDivs[2].classList.add('textselected-3')
+    } else if (noteDivs.length == 2) {
+      noteDivs[0].classList.add('textselected-1')
+      noteDivs[1].style.left = `${(window.innerWidth - 500) / 2}px`
+      noteDivs[1].classList.add('textselected-2')
+    } else if (noteDivs.length == 1) {
+      noteDivs[0].classList.add('textselected-2')
+      noteDivs[0].style.left = `${(window.innerWidth - 500) / 2}px`
+    }
+
+    const noteNumber = document.querySelectorAll('.note .notenum')
+    const noteTexting = document.querySelectorAll('.note .notetexting')
+    for (let i = 0; i < noteNumber.length; i++) {
+      noteNumber[i].innerHTML = `${noteTexting[i].value.replace(/\s*/g, "").length}个字符`
+    }
+    for (let i = 0; i < noteTexting.length; i++) {
+      noteTexting[i].addEventListener('input', () => {
+        noteNumber[i].innerHTML = `${noteTexting[i].value.replace(/\s*/g, "").length}个字符`
+      })
+    }
+
+    function noteCommon() {
+      noteTextbox.innerHTML = ''
+      for (let i = 0; i < noteData.length; i++) {
+        noteTextbox.innerHTML += `<div class="note">
+          <div id="alter">
+            <span id="alterText" title="编辑"><svg t="1704945593575" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="8737" ><path d="M928 365.664a32 32 0 0 0-32 32V864a32 32 0 0 1-32 32H160a32 32 0 0 1-32-32V160a32 32 0 0 1 32-32h429.6a32 32 0 0 0 0-64H160a96 96 0 0 0-96 96v704a96 96 0 0 0 96 96h704a96 96 0 0 0 96-96V397.664a32 32 0 0 0-32-32z" fill="#afabab" p-id="8738"></path><path d="M231.616 696.416a38.4 38.4 0 0 0 44.256 53.792l148-38.368L950.496 185.248 814.72 49.472 290.432 573.76l-58.816 122.656z m111.808-85.12L814.72 140l45.248 45.248-468.992 468.992-77.824 20.16 30.272-63.104z" fill="#afabab" p-id="8739"></path></svg></span>
+            <span id="saving" title="保存">
+              <svg t="1704950947543" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="10014" ><path d="M196.923077 0h630.153846a196.923077 196.923077 0 0 1 196.923077 196.923077v630.153846a196.923077 196.923077 0 0 1-196.923077 196.923077H196.923077a196.923077 196.923077 0 0 1-196.923077-196.923077V196.923077a196.923077 196.923077 0 0 1 196.923077-196.923077z m0 78.769231a118.153846 118.153846 0 0 0-118.153846 118.153846v630.153846a118.153846 118.153846 0 0 0 118.153846 118.153846h630.153846a118.153846 118.153846 0 0 0 118.153846-118.153846V196.923077a118.153846 118.153846 0 0 0-118.153846-118.153846H196.923077z m584.900923 258.205538a36.509538 36.509538 0 0 1 1.260308 51.633231l-299.480616 313.107692c-0.118154 0.157538-0.393846 0.236308-0.630154 0.472616l-0.393846 0.551384c-2.166154 2.126769-4.726154 3.229538-7.207384 4.726154-1.575385 0.866462-2.796308 2.166154-4.411077 2.835692a35.800615 35.800615 0 0 1-27.490462 0.07877c-1.260308-0.512-2.284308-1.614769-3.544615-2.284308-2.756923-1.457231-5.592615-2.835692-8.034462-5.12-0.196923-0.157538-0.275692-0.433231-0.512-0.669538-0.196923-0.118154-0.393846-0.196923-0.551384-0.354462l-150.843077-156.593231a36.430769 36.430769 0 0 1 0.945231-51.633231 36.391385 36.391385 0 0 1 51.63323 0.945231l124.455385 129.102769 273.092923-285.61723a36.548923 36.548923 0 0 1 51.712-1.181539z" p-id="10015" fill="#afabab"></path></svg>
+              </span>
+          </div>
+          <li class="page">${i + 1}</li>
+          <div id="noteDelbox" title="删除">
+          <span id="noteDel"><svg t="1704439198763" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="4779"><path d="M607.897867 768.043004c-17.717453 0-31.994625-14.277171-31.994625-31.994625L575.903242 383.935495c0-17.717453 14.277171-31.994625 31.994625-31.994625s31.994625 14.277171 31.994625 31.994625l0 351.94087C639.892491 753.593818 625.61532 768.043004 607.897867 768.043004z" fill="#000000" p-id="4780"></path><path d="M415.930119 768.043004c-17.717453 0-31.994625-14.277171-31.994625-31.994625L383.935495 383.935495c0-17.717453 14.277171-31.994625 31.994625-31.994625 17.717453 0 31.994625 14.277171 31.994625 31.994625l0 351.94087C447.924744 753.593818 433.647573 768.043004 415.930119 768.043004z" fill="#000000" p-id="4781"></path><path d="M928.016126 223.962372l-159.973123 0L768.043004 159.973123c0-52.980346-42.659499-95.983874-95.295817-95.983874L351.94087 63.989249c-52.980346 0-95.983874 43.003528-95.983874 95.983874l0 63.989249-159.973123 0c-17.717453 0-31.994625 14.277171-31.994625 31.994625s14.277171 31.994625 31.994625 31.994625l832.032253 0c17.717453 0 31.994625-14.277171 31.994625-31.994625S945.73358 223.962372 928.016126 223.962372zM319.946246 159.973123c0-17.545439 14.449185-31.994625 31.994625-31.994625l320.806316 0c17.545439 0 31.306568 14.105157 31.306568 31.994625l0 63.989249L319.946246 223.962372 319.946246 159.973123 319.946246 159.973123z" fill="#000000" p-id="4782"></path><path d="M736.048379 960.010751 288.123635 960.010751c-52.980346 0-95.983874-43.003528-95.983874-95.983874L192.139761 383.591466c0-17.717453 14.277171-31.994625 31.994625-31.994625s31.994625 14.277171 31.994625 31.994625l0 480.435411c0 17.717453 14.449185 31.994625 31.994625 31.994625l448.096758 0c17.717453 0 31.994625-14.277171 31.994625-31.994625L768.215018 384.795565c0-17.717453 14.277171-31.994625 31.994625-31.994625s31.994625 14.277171 31.994625 31.994625l0 479.231312C832.032253 916.835209 789.028725 960.010751 736.048379 960.010751z" fill="#000000" p-id="4783"></path></svg></span>
+          </div>
+        <h2>${noteData[i].title}</h2>
+        <p class="notetime">${noteData[i].noteSetTime}</p>
+        <p class="notenum"></p>
+        <textarea class="notetexting" name="" cols="30" rows="10" readonly>${noteData[i].text}</textarea>
+      </div>`
+      }
+    }
+
+    const save = document.querySelectorAll('#saving')
+    const alterText = document.querySelectorAll('#alterText')
+    for (let i = 0; i < save.length; i++) {
+      save[i].style.display = 'none'
+      save[i].addEventListener('click', (e) => {
+        save[i].style.display = 'none'
+        alterText[i].style.display = 'block'
+        noteTexting[i].readOnly = true
+        noteData = JSON.parse(localStorage.getItem('noteData'))
+        noteData[i].text = noteTexting[i].value
+        localStorage.setItem('noteData', JSON.stringify(noteData))
+      })
+      alterText[i].addEventListener('click', (e) => {
+        alterText[i].style.display = 'none'
+        save[i].style.display = 'block'
+        noteTexting[i].readOnly = false
+        noteTexting[i].focus()
+      })
+    }
+
+    noteAddBtn.addEventListener('click', () => {
+      noteAddBox.style.display = 'block'
+    })
+
+    let n = 0
+    const noteDelBoder = document.querySelector('#delete .border')
+    const noteDelContent = document.querySelector('#delete .content')
+    noteDeleteBtn.addEventListener('click', () => {
+      const noteDivs = document.querySelectorAll('.notebox .note')
+      if (noteDivs.length === 0) {
+        alert('没有可以删除的记事本哦，先点击ADD添加吧！！！')
+      } else {
+        n++
+        n = n == 2 ? 0 : 1
+        noteAddBtn.style.pointerEvents = n == 0 ? 'auto' : 'none'
+        if (n % 2 == 0) {
+          noteDelBoder.style.strokeWidth = '8px'
+          noteDelContent.classList.remove('btnSelected')
+        } else {
+          noteDelBoder.style.strokeWidth = '0px'
+          noteDelContent.classList.add('btnSelected')
+        }
+        const noteDelbox = document.querySelectorAll('#noteDelbox')
+        for (let i = 0; i < noteDelbox.length; i++) {
+          noteDelbox[i].style.opacity = n == 0 ? 0 : 1
+          noteDelbox[i].style.pointerEvents = n == 0 ? 'none' : 'auto'
+          alterText[i].style.pointerEvents = n == 0 ? 'auto' : 'none'
+        }
+      }
+    })
+    const noteDelbox = document.querySelectorAll('#noteDelbox')
+    for (let i = 0; i < noteDelbox.length; i++) {
+      noteDelbox[i].addEventListener('click', () => {
+        noteData = JSON.parse(localStorage.getItem('noteData'))
+        noteData.splice(i, 1)
+        localStorage.setItem('noteData', JSON.stringify(noteData))
+        window.location.reload()
+      })
+    }
+    addFalse.addEventListener('click', () => {
+      noteAddBox.style.display = 'none'
+      noteTitle.value = ''
+      noteText.value = ''
+    })
+
+    noteTitle.addEventListener('input', () => {
+      noteTitle.value = noteTitle.value.replace(/\s*/g, "")
+    })
+    addTrue.addEventListener('click', () => {
+      noteAddBox.style.display = 'none'
+      //获取note标题
+      let title = noteTitle.value.replace(/\s*/g, "")
+      //获取创建事件时的时间
+      const date = new Date()
+      const Y = date.getFullYear()
+      let M = date.getMonth() + 1
+      let D = date.getDate()
+      let h = date.getHours()
+      let m = date.getMinutes()
+      M = M < 10 ? '0' + M : M
+      D = D < 10 ? '0' + D : D
+      h = h < 10 ? '0' + h : h
+      m = m < 10 ? '0' + m : m
+      let noteSetTime = `${Y}-${M}-${D} ${h}:${m}`
+      let text = noteText.value.replace(/\s*/g, "")
+      let noteObj = {
+        title: title,
+        noteSetTime: noteSetTime,
+        text: text
+      }
+      if (title === '') {
+        alert('标题名不能为空！！！')
+        noteAddBtn.click()
+      } else if (text === '') {
+        alert('笔记文本内容不能为空！！！')
+        noteAddBtn.click()
+      } else {
+        noteData = JSON.parse(localStorage.getItem('noteData'))
+        noteData.push(noteObj)
+        localStorage.setItem('noteData', JSON.stringify(noteData))
+        noteCommon()
+        noteTitle.value = ''
+        noteText.value = ''
+        window.location.reload()
+      }
+    })
+    noteText.addEventListener('input', () => {
+      notenum.innerHTML = `${noteText.value.replace(/\s*/g, "").length}个字符`
+    })
+
+    function rlCommon(x, y) {
+      document.querySelector('.textselected-1').classList.remove('textselected-1')
+      document.querySelector('.textselected-2').classList.remove('textselected-2')
+      document.querySelector('.textselected-3').classList.remove('textselected-3')
+      noteDivs[noteKey].classList.add('textselected-1')
+      noteDivs[noteKey].style.left = ''
+      noteDivs[x].classList.add('textselected-2')
+      noteDivs[x].style.left = `${(window.innerWidth - 500) / 2}px`
+      noteDivs[y].classList.add('textselected-3')
+      noteDivs[y].style.left = ''
+    }
+    function rlsCommon() {
+      if (noteKey < noteDivs.length - 2) {
+        rlCommon(noteKey + 1, noteKey + 2)
+      } else if (noteKey == noteDivs.length - 2) {
+        rlCommon(noteKey + 1, 0)
+      } else if (noteKey == noteDivs.length - 1) {
+        rlCommon(0, 1)
+      }
+    }
+    function setTimeRightCommon(k) {
+      noteDivs[k - 1].style.left = '-500px'
+      setTimeout(() => {
+        noteDivs[k - 1].style.display = 'none'
+      }, 300)
+      setTimeout(() => {
+        right.style.pointerEvents = 'auto'
+        noteDivs[k - 1].style.left = ''
+        for (let i = 0; i < noteDivs.length; i++) {
+          noteDivs[i].style.display = 'block'
+        }
+      }, 500)
+    }
+
+    function setTimeLeftCommon() {
+      noteDivs[noteKey].style.left = ''
+      noteDivs[noteKey].style.left = '-500px'
+      noteDivs[noteKey].style.transition = ''
+      noteDivs[noteKey].style.display = 'none'
+      setTimeout(() => {
+        noteDivs[noteKey].style.display = 'block'
+      }, 10)
+      setTimeout(() => {
+        left.style.pointerEvents = 'auto'
+      }, 500)
+    }
+    right.style.pointerEvents = left.style.pointerEvents = noteData.length < 2 ? 'none' : 'auto'
+    var noteKey = 0
+    if (noteData.length < 3 && noteKey == 0) {
+      left.style.pointerEvents = 'none'
+    }
+
+    left.addEventListener('click', () => {
+      noteKey--
+      const noteDivs = document.querySelectorAll('.notebox .note')
+      noteKey = noteKey < 0 ? noteDivs.length - 1 : noteKey
+      if (noteDivs.length > 3) {
+        left.style.pointerEvents = 'none'
+        if (noteKey == noteDivs.length - 1) {
+          setTimeLeftCommon()
+          setTimeout(() => {
+            noteDivs[noteKey].style.transition = 'all .5s'
+            rlCommon(0, 1)
+          }, 50)
+        } else {
+          setTimeLeftCommon()
+          setTimeout(() => {
+            noteDivs[noteKey].style.transition = 'all .5s'
+            rlsCommon()
+          }, 50)
+        }
+      } else if (noteDivs.length < 3) {
+        left.style.pointerEvents = 'none'
+        right.style.pointerEvents = 'auto'
+        document.querySelector('.textselected-2').classList.remove('textselected-2')
+        document.querySelector('.textselected-3').classList.remove('textselected-3')
+        noteDivs[0].classList.add('textselected-1')
+        noteDivs[0].style.left = ''
+        noteDivs[1].style.left = `${(window.innerWidth - 500) / 2}px`
+        noteDivs[1].classList.add('textselected-2')
+      } else if (noteDivs.length == 3)
+        rlsCommon()
+    })
+
+    right.addEventListener('click', () => {
+      noteKey++
+      const noteDivs = document.querySelectorAll('.notebox .note')
+      if (noteDivs.length > 3) {
+        right.style.pointerEvents = 'none'
+        if (noteKey == noteDivs.length) {
+          setTimeRightCommon(noteDivs.length)
+          noteKey = 0
+          rlCommon(noteKey + 1, noteKey + 2)
+        } else {
+          setTimeRightCommon(noteKey)
+          rlsCommon()
+        }
+      } else if (noteDivs.length == 3) {
+        noteKey = noteKey == noteDivs.length ? 0 : noteKey
+        rlsCommon()
+      } else {
+        right.style.pointerEvents = 'none'
+        left.style.pointerEvents = 'auto'
+        document.querySelector('.textselected-1').classList.remove('textselected-1')
+        document.querySelector('.textselected-2').classList.remove('textselected-2')
+        noteDivs[0].classList.add('textselected-2')
+        noteDivs[0].style.left = `${(window.innerWidth - 500) / 2}px`
+        noteDivs[1].classList.add('textselected-3')
+        noteDivs[1].style.left = ''
+      }
+    })
+
+    //全部删除本地存储数据
+    const clearAll = document.querySelector('#clearAll')
+    const clearbox = document.querySelector('.clearbox')
+    const clearF = document.querySelector('.clearbox .clearF')
+    const clearT = document.querySelector('.clearbox .clearT')
+    const clearNull = document.querySelector('.clearNull')
+    const nullEsc = document.querySelector('.clearNull .nullEsc')
+    let cleartime = 5
+    let cleardata = 0
+    clearAll.addEventListener('click', () => {
+      noteData = JSON.parse(localStorage.getItem('noteData'))
+      if (noteData.length== 0) {
+        clearNull.style.display = 'block'
+        nullEsc.addEventListener('click', () => {
+          clearNull.style.display = 'none'
+        })
+      } else {
+        clearbox.style.display = 'block'
+        clearT.style.pointerEvents = 'none'
+        clearTimeout(cleardata)
+        cleardata = setInterval(() => {
+          cleartime--
+          clearT.innerHTML = `确定(${cleartime})`
+          if (cleartime < 0) {
+            clearTimeout(cleardata)
+            clearT.innerHTML = '确定'
+            clearT.disabled = false
+            clearT.style.pointerEvents = 'auto'
+          }
+        }, 1000)
+        clearF.addEventListener('click', () => {
+          clearbox.style.display = 'none'
+          cleartime = 5
+          clearT.innerHTML = '确定(5)'
+          clearTimeout(cleardata)
+        })
+        clearT.addEventListener('click', () => {
+          localStorage.clear()
+          clearbox.style.display = 'none'
+          cleartime = 5
+          clearT.innerHTML = '确定(5)'
+          clearTimeout(cleardata)
+          window.location.reload()
+        })
+      }
+    })
+
 </script>
 </html>
