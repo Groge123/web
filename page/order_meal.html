@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -33,7 +34,7 @@
             background: white;
             padding: 20px;
             border-radius: 10px;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
         }
 
         .product-card img {
@@ -48,7 +49,7 @@
             background: white;
             padding: 20px;
             border-radius: 10px;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
         }
 
         .cart-item {
@@ -83,6 +84,7 @@
             margin-top: 20px;
             text-align: right;
         }
+
         .select_num_btn {
             width: 60px;
             height: 30px;
@@ -93,16 +95,19 @@
             padding: 0;
             transition: all 0.3s;
         }
+
         .select_num_btn.active {
             background-color: #b45252;
             color: white;
             border-color: #b45252;
         }
+
         .price-display {
             color: #e4393c;
             font-size: 1.2em;
             margin: 10px 0;
         }
+
         /* 新增结算按钮样式 */
         .checkout-btn {
             background: #28a745;
@@ -111,7 +116,7 @@
             padding: 12px;
             font-size: 1.1em;
         }
-        
+
         /* 收入显示样式 */
         .income-display {
             margin-top: 15px;
@@ -119,39 +124,44 @@
             border-top: 1px solid #eee;
             font-size: 1.1em;
         }
-        
+
         /* 臊子弹窗优化 */
         .meat {
             position: absolute;
             background: white;
             padding: 10px;
             border-radius: 8px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
             z-index: 1;
             margin-top: 5px;
         }
-        .meat button{
+
+        .meat button {
             background-color: #3333336b;
             margin: 5px;
         }
+
         .history-section {
             margin-top: 20px;
             padding: 15px;
             background: #fff;
             border-radius: 8px;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
         }
+
         .history-item {
             padding: 10px;
             border-bottom: 1px solid #eee;
             margin-bottom: 10px;
         }
+
         .history-products {
             margin-left: 20px;
             color: #666;
         }
     </style>
 </head>
+
 <body>
     <div class="container">
         <div class="product-list" id="productList"></div>
@@ -167,8 +177,8 @@
             </div>
         </div>
     </div>
-     <!-- 新增历史记录区域 -->
-     <div class="history-section">
+    <!-- 新增历史记录区域 -->
+    <div class="history-section">
         <h3>历史订单</h3>
         <div id="historyList"></div>
     </div>
@@ -177,79 +187,81 @@
         // 初始化本地存储数据
         let dailyIncome = localStorage.getItem('dailyIncome') ? parseFloat(localStorage.getItem('dailyIncome')) : 0;
         let historyOrders = JSON.parse(localStorage.getItem('historyOrders')) || [];
+        // 新增编辑状态跟踪
+        let editingOrderId = null;
         // 新增收入记录
-      // 商品数据
-    const products = [
-        { 
-            id: 1, 
-            name: '面', 
-            basePrice: 6,
-            selectedWeight: 1,
-            meatType: '素',  // 默认臊子类型
-            meatPrice: 0,       // 默认臊子价格
-            image: 'https://via.placeholder.com/200x150?text=面'
-        },
-        { 
-            id: 2, 
-            name: '粉', 
-            basePrice: 6,
-            selectedWeight: 1,
-            meatType: '素',  // 默认臊子类型
-            meatPrice: 0,       // 默认臊子价格
-            image: 'https://via.placeholder.com/200x150?text=粉'
-        },
-        { 
-            id: 3, 
-            name: '抄手', 
-            basePrice: 7,
-            selectedWeight: 1,
-            meatType: '素',  // 默认臊子类型
-            meatPrice: 0,       // 默认臊子价格
-            image: 'https://via.placeholder.com/200x150?text=抄手'
-        },
-        { 
-            id: 4, 
-            name: '蛋炒饭', 
-            basePrice: 8,
-            selectedWeight: 1,
-            meatType: '',  // 默认臊子类型
-            meatPrice: 0,       // 默认臊子价格
-            image: 'https://via.placeholder.com/200x150?text=抄手'
-        },
-        { 
-            id: 5, 
-            name: '盖饭', 
-            basePrice: 13,
-            selectedWeight: 1,
-            meatType: '',  // 默认臊子类型
-            meatPrice: 0,       // 默认臊子价格
-            image: 'https://via.placeholder.com/200x150?text=抄手'
-        },
-    ];
-// 商品数据初始化(添加恢复默认状态的方法)
-function resetProductState(product) {
+        // 商品数据
+        const products = [
+            {
+                id: 1,
+                name: '面',
+                basePrice: 6,
+                selectedWeight: 1,
+                meatType: '素',  // 默认臊子类型
+                meatPrice: 0,       // 默认臊子价格
+                image: 'https://via.placeholder.com/200x150?text=面'
+            },
+            {
+                id: 2,
+                name: '粉',
+                basePrice: 6,
+                selectedWeight: 1,
+                meatType: '素',  // 默认臊子类型
+                meatPrice: 0,       // 默认臊子价格
+                image: 'https://via.placeholder.com/200x150?text=粉'
+            },
+            {
+                id: 3,
+                name: '抄手',
+                basePrice: 7,
+                selectedWeight: 1,
+                meatType: '素',  // 默认臊子类型
+                meatPrice: 0,       // 默认臊子价格
+                image: 'https://via.placeholder.com/200x150?text=抄手'
+            },
+            {
+                id: 4,
+                name: '蛋炒饭',
+                basePrice: 8,
+                selectedWeight: 1,
+                meatType: '',  // 默认臊子类型
+                meatPrice: 0,       // 默认臊子价格
+                image: 'https://via.placeholder.com/200x150?text=抄手'
+            },
+            {
+                id: 5,
+                name: '盖饭',
+                basePrice: 13,
+                selectedWeight: 1,
+                meatType: '',  // 默认臊子类型
+                meatPrice: 0,       // 默认臊子价格
+                image: 'https://via.placeholder.com/200x150?text=抄手'
+            },
+        ];
+        // 商品数据初始化(添加恢复默认状态的方法)
+        function resetProductState(product) {
             product.selectedWeight = 1;
             product.meatType = '素';
             product.meatPrice = 0;
             const priceElement = document.getElementById(`price_${product.id}`);
-            if(priceElement) {
+            if (priceElement) {
                 priceElement.textContent = `价格：¥${calculatePrice(product.basePrice, 1).toFixed(2)}`;
             }
             const productCard = document.querySelector(`.product-card[data-id="${product.id}"] h3`);
-            if(productCard) {
+            if (productCard) {
                 productCard.textContent = product.name;
             }
         }
 
-    let cart = [];
+        let cart = [];
 
-    // 初始化商品列表
-    function initProducts() {
-        const productList = document.getElementById('productList');
-        products.forEach(product => {
-            const productCard = document.createElement('div');
-            productCard.className = 'product-card';
-            productCard.innerHTML = `
+        // 初始化商品列表
+        function initProducts() {
+            const productList = document.getElementById('productList');
+            products.forEach(product => {
+                const productCard = document.createElement('div');
+                productCard.className = 'product-card';
+                productCard.innerHTML = `
                 <h3 style="padding-bottom:10px">${product.name}</h3>
                 <div class="weight-selector">
                     <button onclick="changePrice(${product.id}, 1)" class="select_num_btn">一两</button>
@@ -273,66 +285,66 @@ function resetProductState(product) {
                 </div>
             `;
 
-            productCard.dataset.id = product.id; // 设置data-id属性
-            productList.appendChild(productCard);
-        });
-    }
-    // 显示或隐藏臊子选项
-    function toggleMeatOptions(productId) {
-        const meatDiv = document.getElementById(`meat_${productId}`);
-        if (meatDiv.style.display === 'none') {
-            meatDiv.style.display = 'block';
-        } else {
-            meatDiv.style.display = 'none';
+                productCard.dataset.id = product.id; // 设置data-id属性
+                productList.appendChild(productCard);
+            });
         }
-    }
+        // 显示或隐藏臊子选项
+        function toggleMeatOptions(productId) {
+            const meatDiv = document.getElementById(`meat_${productId}`);
+            if (meatDiv.style.display === 'none') {
+                meatDiv.style.display = 'block';
+            } else {
+                meatDiv.style.display = 'none';
+            }
+        }
 
-    // 修改后的addMeat函数
+        // 修改后的addMeat函数
         function addMeat(productId, meatType, priceIncrease) {
             const product = products.find(p => p.id === productId);
             product.meatType = meatType;
             product.meatPrice = priceIncrease;
-            
+
             // 更新价格显示
             const priceElement = document.getElementById(`price_${productId}`);
             const currentPrice = calculatePrice(product.basePrice, product.selectedWeight) + priceIncrease;
             priceElement.textContent = `价格：¥${currentPrice.toFixed(2)}`;
-            
+
             // 更新商品名称显示
             const productCard = document.querySelector(`.product-card[data-id="${productId}"] h3`);
             productCard.textContent = `${meatType}${product.name}`;
-            
+
             toggleMeatOptions(productId);
         }
 
-    // 计算当前价格
-    function calculatePrice(basePrice, weight) {
-        return basePrice + (weight - 1); // 每增加一两加1元
-    }
-
-    // 修改价格和重量
-    function changePrice(productId, weight) {
-        const product = products.find(p => p.id === productId);
-        product.selectedWeight = weight;
-        
-        // 更新界面显示
-        const productCard = document.querySelector(`.product-card[data-id="${productId}"]`);
-        if (productCard) {
-            const priceElement = productCard.querySelector(`#price_${productId}`);
-            priceElement.textContent = `价格：¥${calculatePrice(product.basePrice, weight).toFixed(2)}`;
-            
-            productCard.querySelectorAll('.select_num_btn').forEach((btn, index) => {
-                btn.classList.toggle('active', (index + 1) === weight);
-            });
+        // 计算当前价格
+        function calculatePrice(basePrice, weight) {
+            return basePrice + (weight - 1); // 每增加一两加1元
         }
-    }
 
-      // 添加商品到购物车
-      // 修改后的addToCart函数
-      function addToCart(productId) {
+        // 修改价格和重量
+        function changePrice(productId, weight) {
+            const product = products.find(p => p.id === productId);
+            product.selectedWeight = weight;
+
+            // 更新界面显示
+            const productCard = document.querySelector(`.product-card[data-id="${productId}"]`);
+            if (productCard) {
+                const priceElement = productCard.querySelector(`#price_${productId}`);
+                priceElement.textContent = `价格：¥${calculatePrice(product.basePrice, weight).toFixed(2)}`;
+
+                productCard.querySelectorAll('.select_num_btn').forEach((btn, index) => {
+                    btn.classList.toggle('active', (index + 1) === weight);
+                });
+            }
+        }
+
+        // 添加商品到购物车
+        // 修改后的addToCart函数
+        function addToCart(productId) {
             const product = products.find(p => p.id === productId);
             const finalPrice = calculatePrice(product.basePrice, product.selectedWeight) + product.meatPrice;
-            
+
             // 生成唯一标识：商品ID + 重量 + 臊子类型
             const cartItemId = `${productId}-${product.selectedWeight}-${product.meatType}`;
 
@@ -354,34 +366,57 @@ function resetProductState(product) {
         }
         // 新增结算功能
         // 修改后的结算功能
+        // 修改后的结算功能
         function checkout() {
             const total = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
-            if(total === 0) return;
+            if (total === 0) return;
 
-            // 保存到历史记录
-            const order = {
-                id: Date.now(),
-                time: new Date().toLocaleString(),
-                items: [...cart],
-                total: total
-            };
-            historyOrders.unshift(order);
+            // 如果是编辑模式
+            if (editingOrderId !== null) {
+                // 找到原订单
+                const oldOrderIndex = historyOrders.findIndex(o => o.id === editingOrderId);
+                if (oldOrderIndex !== -1) {
+                    // 计算差额更新收入
+                    const diff = total - historyOrders[oldOrderIndex].total;
+                    dailyIncome += diff;
+
+                    // 替换订单
+                    historyOrders[oldOrderIndex] = {
+                        id: editingOrderId,
+                        time: new Date().toLocaleString(),
+                        items: JSON.parse(JSON.stringify(cart)),
+                        total: total
+                    };
+                }
+                editingOrderId = null;
+            }
+            // 如果是新建订单
+            else {
+                dailyIncome += total;
+                historyOrders.unshift({
+                    id: Date.now(),
+                    time: new Date().toLocaleString(),
+                    items: JSON.parse(JSON.stringify(cart)),
+                    total: total
+                });
+            }
+
+            // 持久化存储
             localStorage.setItem('historyOrders', JSON.stringify(historyOrders));
-
-            // 更新收入
-            dailyIncome += total;
             localStorage.setItem('dailyIncome', dailyIncome.toString());
-            document.getElementById('income').textContent = dailyIncome.toFixed(2);
 
             // 重置状态
             cart = [];
             products.forEach(resetProductState);
             updateCart();
             updateHistory();
+            document.getElementById('income').textContent = dailyIncome.toFixed(2);
         }
+
+        // 修复后的历史订单显示
         function updateHistory() {
-    const historyList = document.getElementById('historyList');
-    historyList.innerHTML = historyOrders.map(order => `
+            const historyList = document.getElementById('historyList');
+            historyList.innerHTML = historyOrders.map(order => `
         <div class="history-item">
             <div>时间：${order.time} 总价：¥${order.total.toFixed(2)}
                 <button onclick="deleteOrder(${order.id})">删除</button>
@@ -389,48 +424,64 @@ function resetProductState(product) {
             </div>
             <div class="history-products">
                 ${order.items.map(item => `
-                    <div>${item.name}(${item.weight}两)×${item.quantity}</div>
+                    <div>${item.name}（${item.weight}两）×${item.quantity}</div>
                 `).join('')}
             </div>
         </div>
     `).join('');
-}
-function deleteOrder(orderId) {
-    historyOrders = historyOrders.filter(order => order.id === orderId);
-    localStorage.setItem('historyOrders', JSON.stringify(historyOrders));
-    updateHistory();
-}
+        }
+        // 修复后的删除功能
+        // 修改后的删除功能
+        function deleteOrder(orderId) {
+            const index = historyOrders.findIndex(o => o.id === orderId);
+            if (index === -1) return;
 
-function editOrder(orderId) {
-    const order = historyOrders.find(o => o.id === orderId);
-    if (order) {
-        // 清空当前购物车
-        cart = [];
-        
-        // 重建购物车项(保持原始ID生成逻辑)
-        order.items.forEach(item => {
-            const product = products.find(p => p.id === item.originalId);
-            if (product) {
-                cart.push({
-                    id: `${item.originalId}-${item.weight}-${product.meatType}`,
-                    originalId: item.originalId,
-                    name: item.name,
-                    price: item.price,
-                    weight: item.weight,
-                    quantity: item.quantity
-                });
-            }
-        });
-        
-        updateCart();
-    }
-}
-      // 修改后的updateCart函数
-      function updateCart() {
+            // 减少总收入
+            dailyIncome -= historyOrders[index].total;
+
+            // 更新存储
+            historyOrders.splice(index, 1);
+            localStorage.setItem('historyOrders', JSON.stringify(historyOrders));
+            localStorage.setItem('dailyIncome', dailyIncome.toString());
+
+            // 更新显示
+            document.getElementById('income').textContent = dailyIncome.toFixed(2);
+            updateHistory();
+        }
+
+        // 修改后的编辑功能
+        function editOrder(orderId) {
+            const order = historyOrders.find(o => o.id === orderId);
+            if (!order) return;
+
+            // 设置编辑模式
+            editingOrderId = orderId;
+
+            // 清空当前购物车
+            cart = [];
+
+            // 重建购物车项
+            order.items.forEach(item => {
+                const product = products.find(p => p.id === item.originalId);
+                if (product) {
+                    const meatType = item.name.replace(product.name, '');
+                    cart.push({
+                        ...item,
+                        id: `${item.originalId}-${item.weight}-${meatType}`
+                    });
+                }
+            });
+
+            // 更新按钮文字
+            document.querySelector('.checkout-btn').textContent = '保存修改';
+            updateCart();
+        }
+        // 修改后的updateCart函数
+        function updateCart() {
             const cartItems = document.getElementById('cartItems');
             const totalElement = document.getElementById('total');
             let total = 0;
-            
+
             cartItems.innerHTML = '';
             cart.forEach(item => {
                 total += item.price * item.quantity;
@@ -450,12 +501,18 @@ function editOrder(orderId) {
                 `;
                 cartItems.appendChild(itemElement);
             });
-            
+
             totalElement.textContent = total.toFixed(2);
             document.getElementById('income').textContent = dailyIncome.toFixed(2);
+
+            // 如果购物车为空时重置编辑状态
+            if (cart.length === 0) {
+                editingOrderId = null;
+                document.querySelector('.checkout-btn').textContent = '结算';
+            }
         }
-       // 修改后的操作函数
-       function changeQuantity(itemId, amount) {
+        // 修改后的操作函数
+        function changeQuantity(itemId, amount) {
             const item = cart.find(item => item.id === itemId);
             if (item) {
                 item.quantity += amount;
@@ -471,18 +528,22 @@ function editOrder(orderId) {
             cart = cart.filter(i => i.id !== itemId);
             updateCart();
         }
-        // 修复初始化代码
-document.addEventListener('DOMContentLoaded', () => {
-    // 正确解析本地存储数据
-    dailyIncome = parseFloat(localStorage.getItem('dailyIncome')) || 0;
-    historyOrders = JSON.parse(localStorage.getItem('historyOrders')) || [];
-    
-    document.getElementById('income').textContent = dailyIncome.toFixed(2);
-    updateHistory();
-});
+        // 初始化修复
+        document.addEventListener('DOMContentLoaded', () => {
+            // 正确解析数字类型的ID
+            historyOrders = JSON.parse(localStorage.getItem('historyOrders') || "[]").map(order => ({
+                ...order,
+                id: Number(order.id) // 确保ID是数字类型
+            }));
 
-      // 初始化页面
-      initProducts();
-  </script>
+            dailyIncome = Number(localStorage.getItem('dailyIncome')) || 0;
+            document.getElementById('income').textContent = dailyIncome.toFixed(2);
+            updateHistory();
+        });
+
+        // 初始化页面
+        initProducts();
+    </script>
 </body>
+
 </html>
