@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>老弯羊肉粉</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+
+        .container {
+            display: flex;
+            gap: 20px;
+        }
+
+        .product-list {
+            flex: 2;
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 15px;
+        }
+
+        .product-card {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        .product-card img {
+            width: 100%;
+            height: 150px;
+            object-fit: cover;
+            border-radius: 5px;
+        }
+
+        .cart {
+            flex: 1;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        .cart-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 0;
+            border-bottom: 1px solid #eee;
+        }
+
+        button {
+            background: #007bff;
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background: #0056b3;
+        }
+
+        .quantity-controls button {
+            padding: 5px 10px;
+            margin: 0 5px;
+        }
+
+        .total-price {
+            font-size: 1.2em;
+            font-weight: bold;
+            margin-top: 20px;
+            text-align: right;
+        }
+        .select_num_btn {
+            width: 60px;
+            height: 30px;
+            border-radius: 5px;
+            background-color: #f0f0f0;
+            color: #333;
+            border: 1px solid #ddd;
+            padding: 0;
+            transition: all 0.3s;
+        }
+        .select_num_btn.active {
+            background-color: #b45252;
+            color: white;
+            border-color: #b45252;
+        }
+        .price-display {
+            color: #e4393c;
+            font-size: 1.2em;
+            margin: 10px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="product-list" id="productList"></div>
+        <div class="cart">
+            <h2>购物车</h2>
+            <div id="cartItems"></div>
+            <div class="total-price">总计：¥<span id="total">0.00</span></div>
+        </div>
+    </div>
+
+    <script>
+      // 商品数据
+    const products = [
+        { 
+            id: 1, 
+            name: '面', 
+            basePrice: 7,
+            selectedWeight: 1,
+            image: 'https://via.placeholder.com/200x150?text=面'
+        },
+        { 
+            id: 2, 
+            name: '粉', 
+            basePrice: 7,
+            selectedWeight: 1,
+            image: 'https://via.placeholder.com/200x150?text=粉'
+        },
+        { 
+            id: 3, 
+            name: '抄手', 
+            basePrice: 7,
+            selectedWeight: 1,
+            image: 'https://via.placeholder.com/200x150?text=抄手'
+        },
+        { 
+            id: 4, 
+            name: '羊肉粉', 
+            basePrice: 8,
+            selectedWeight: 1,
+            image: 'https://via.placeholder.com/200x150?text=羊肉粉'
+        }
+    ];
+
+    let cart = [];
+
+    // 初始化商品列表
+    function initProducts() {
+        const productList = document.getElementById('productList');
+        products.forEach(product => {
+            const productCard = document.createElement('div');
+            productCard.className = 'product-card';
+            productCard.innerHTML = `
+                <h3 style="padding-bottom:10px">${product.name}</h3>
+                <div class="weight-selector">
+                    <button onclick="changePrice(${product.id}, 1)" class="select_num_btn">一两</button>
+                    <button onclick="changePrice(${product.id}, 2)" class="select_num_btn">二两</button>
+                    <button onclick="changePrice(${product.id}, 3)" class="select_num_btn">三两</button>
+                </div>
+                <p style="padding-bottom:10px;padding-top:10px" id="price_${product.id}">价格：¥${calculatePrice(product.basePrice, product.selectedWeight)}</p>
+                <button onclick="addToCart(${product.id})">加入购物车</button>
+            `;
+            productCard.dataset.id = product.id; // 设置data-id属性
+            productList.appendChild(productCard);
+        });
+    }
+
+    // 计算当前价格
+    function calculatePrice(basePrice, weight) {
+        return basePrice + (weight - 1); // 每增加一两加1元
+    }
+
+    // 修改价格和重量
+    function changePrice(productId, weight) {
+        const product = products.find(p => p.id === productId);
+        product.selectedWeight = weight;
+        
+        // 更新界面显示
+        const productCard = document.querySelector(`.product-card[data-id="${productId}"]`);
+        if (productCard) {
+            const priceElement = productCard.querySelector(`#price_${productId}`);
+            priceElement.textContent = `价格：¥${calculatePrice(product.basePrice, weight).toFixed(2)}`;
+            
+            productCard.querySelectorAll('.select_num_btn').forEach((btn, index) => {
+                btn.classList.toggle('active', (index + 1) === weight);
+            });
+        }
+    }
+
+      // 添加商品到购物车
+      function addToCart(productId) {
+          const product = products.find(p => p.id === productId);
+          const currentPrice = calculatePrice(product.basePrice, product.selectedWeight);
+          
+          // 查找相同商品且相同重量的购物车项
+          const existingItem = cart.find(item => 
+              item.id === productId && 
+              item.weight === product.selectedWeight
+          );
+
+          if (existingItem) {
+              existingItem.quantity++;
+          } else {
+              cart.push({
+                  id: product.id,
+                  name: product.name,
+                  price: currentPrice,
+                  weight: product.selectedWeight,
+                  quantity: 1
+              });
+          }
+          updateCart();
+      }
+
+      // 更新购物车显示
+      function updateCart() {
+          const cartItems = document.getElementById('cartItems');
+          const totalElement = document.getElementById('total');
+          let total = 0;
+          
+          cartItems.innerHTML = '';
+          cart.forEach(item => {
+              total += item.price * item.quantity;
+              const itemElement = document.createElement('div');
+              itemElement.className = 'cart-item';
+              itemElement.innerHTML = `
+                  <div>
+                      <span>${item.name}（${item.weight}两）</span>
+                      <span>单价：¥${item.price.toFixed(2)}</span>
+                  </div>
+                  <div class="quantity-controls">
+                      <button onclick="changeQuantity(${item.id}, ${item.weight}, -1)">-</button>
+                      <span>${item.quantity}</span>
+                      <button onclick="changeQuantity(${item.id}, ${item.weight}, 1)">+</button>
+                      <button onclick="removeItem(${item.id}, ${item.weight})" style="margin-left:10px;">删除</button>
+                  </div>
+              `;
+              cartItems.appendChild(itemElement);
+          });
+
+          totalElement.textContent = total.toFixed(2);
+      }
+
+      // 修改商品数量
+      function changeQuantity(productId, weight, amount) {
+          const item = cart.find(item => 
+              item.id === productId && 
+              item.weight === weight
+          );
+          
+          if (item) {
+              item.quantity += amount;
+              if (item.quantity <= 0) {
+                  cart = cart.filter(i => !(i.id === productId && i.weight === weight));
+              }
+              updateCart();
+          }
+      }
+
+      // 删除商品
+      function removeItem(productId, weight) {
+          cart = cart.filter(i => !(i.id === productId && i.weight === weight));
+          updateCart();
+      }
+
+      // 初始化页面
+      initProducts();
+  </script>
+</body>
+</html>
