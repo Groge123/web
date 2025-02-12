@@ -3,115 +3,225 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Test</title>
+    <title>叫小朋就好</title>
     <style>
-        *{
+        * {
             margin: 0;
             padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+            text-decoration: none;
         }
-        .wrapper{
+
+        body {
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+        }
+
+        .wrapper {
             width: 100%;
-            height: 100vh;
-            background-color: #f0f0f0;
+            min-height: 100vh;
             position: relative;
+            overflow-x: hidden;
         }
-        nav{
+
+        nav {
             width: 100%;
             height: 80px;
-            background-color: #000;
-            position:fixed;
+            background: linear-gradient(135deg, #2c3e50 0%, #3498db 100%);
+            position: fixed;
             top: -200px;
-            transition: all 0.5s;
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
             z-index: 1000;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            border-radius: 0 0 15px 15px;
         }
-        .nav-wrapper{
-            width: 100%;
+
+        .nav-wrapper {
+            width: 90%;
             height: 100%;
+            margin: 0 auto;
             display: flex;
             justify-content: space-between;
             align-items: center;
         }
-        a{
-            text-decoration: none;
-        }
-        .brand-logo{
+
+        .brand-logo {
             color: #fff;
-            font-size: 24px;
-            font-weight: 700;
-        }
-        #nav-mobile{
-            display: flex;
-            list-style: none;
-        }
-        #nav-mobile>li{
-            margin-right: 20px;
-            position: relative;
-        }
-        #nav-mobile li h3,a{
-            cursor: pointer;
-            color: #fff;
-        }
-        .log{
-            position: absolute;
-            width: 100px;
-            background-color: white;
-            opacity: 0;
-            transition: all 0.3s;
-        }
-        .log ul{
-            height: inherit;
-            width: inherit;
-            list-style: none;
-            
-            background-color: rgba(0,0,0,0.5);
-        }
-        .log ul li{
-            display: block;
-            padding: 10px;
-            
-        }
-        .log ul li:hover{
-            
-            background-color: #4d9e44;
-        }
-        ul li:nth-child(2):hover .log{
-            opacity: 1;
+            font-size: 28px;
+            font-weight: 600;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
         }
 
-        .image{
-            width: 100px;
-            height: 100px;
-            margin: auto;
+        #nav-mobile {
+            display: flex;
+            list-style: none;
+            gap: 30px;
+        }
+
+        #nav-mobile li {
+            position: relative;
+            padding: 10px 0;
+        }
+
+        #nav-mobile li h3, 
+        #nav-mobile li a {
+            color: #fff;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        #nav-mobile li h3:hover,
+        #nav-mobile li a:hover {
+            color: #ffd700;
+            transform: translateY(-2px);
+        }
+
+        .log {
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 150px;
+            background: rgba(255, 255, 255, 0.95);
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+            border-radius: 8px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+            margin-top: 10px;
+        }
+
+        .log ul {
+            padding: 10px 0;
+        }
+
+        .log ul li {
+            padding: 12px 20px;
+            transition: all 0.3s ease;
+        }
+
+        .log ul li:hover {
+            background: #4d9e44;
+            transform: translateX(5px);
+        }
+
+        .log ul li a {
+            color: #2c3e50;
+            font-size: 14px;
+        }
+
+        #nav-mobile li:hover .log {
+            opacity: 1;
+            visibility: visible;
+            margin-top: 15px;
+        }
+
+        .image {
+            width: 200px;
+            height: 200px;
             position: absolute;
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
+            perspective: 1000px;
         }
-        .image img{
+
+        .image img {
             width: 100%;
             height: 100%;
             border-radius: 50%;
-            box-shadow: 1px 1px 30px #5fcde4;
-            transition: all 1s;
+            box-shadow: 0 15px 35px rgba(95, 205, 228, 0.4);
+            transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+            animation: float 4s ease-in-out infinite;
         }
-        .image h1{
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-20px); }
+        }
+
+        .image h2 {
+            text-align: center;
+            margin-bottom: 20px;
+            color: #e74c3c;
+            font-size: 28px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        #current_time {
             text-align: center;
             font-size: 24px;
-            font-weight: 700;
+            color: #2c3e50;
             margin-top: 20px;
+            font-weight: 500;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
         }
-        
-        .button  a{
-            width:200px;
-            height: 50px;
-            display: block;
-            background-color: rgb(192, 231, 255);
-            margin: 50px auto; 
-            font-size: 20px;
-            line-height: 50px;
+
+        .content {
+            padding: 120px 20px 50px;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .button {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-top: 40px;
+        }
+
+        .button a {
+            background: linear-gradient(135deg, #3498db 0%, #2980b9 100%);
+            color: white;
+            padding: 15px 30px;
+            border-radius: 12px;
             text-align: center;
-            border-radius: 10px;
-            color: #000000
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(52, 152, 219, 0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 80px;
+        }
+
+        .button a:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(52, 152, 219, 0.4);
+            background: linear-gradient(135deg, #2980b9 0%, #3498db 100%);
+        }
+
+        .button a i {
+            font-style: normal;
+            font-size: 18px;
+            letter-spacing: 1px;
+        }
+
+        @media (max-width: 768px) {
+            .nav-wrapper {
+                width: 95%;
+            }
+
+            #nav-mobile {
+                gap: 15px;
+            }
+
+            .brand-logo {
+                font-size: 22px;
+            }
+
+            .image {
+                width: 150px;
+                height: 150px;
+            }
+
+            #current_time {
+                font-size: 20px;
+            }
+
+            .button {
+                grid-template-columns: 1fr;
+            }
         }
     </style>
 </head>
@@ -162,6 +272,11 @@
                     <i>Sudoku</i>
                 </a>
             </div>
+            <div class="Sudoku">
+                <a href="page/记账本/note_account.html">
+                    <i>记账</i>
+                </a>
+            </div>
         </div>
         
 
@@ -173,6 +288,21 @@
     const time=document.querySelector('#current_time');
     let degree=0;
     let scroll_y=0;
+     // 增加图片动画
+     img.style.animation = "float 4s ease-in-out infinite";
+        
+        // 优化时间显示格式
+        function updateTime() {
+            const options = { 
+                hour: '2-digit', 
+                minute: '2-digit', 
+                second: '2-digit',
+                hour12: false
+            };
+            time.innerHTML = new Date().toLocaleTimeString('zh-CN', options);
+        }
+        setInterval(updateTime, 1000);
+        updateTime();
     //向下滑nav出现在顶部，向上滑nav消失
     window.addEventListener('scroll',()=>{
         if(window.scrollY-scroll_y>0){
