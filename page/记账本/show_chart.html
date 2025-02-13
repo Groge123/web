@@ -1,525 +1,560 @@
 <!DOCTYPE html>
+
 <html lang="zh-CN">
 
 <head>
+
   <meta charset="UTF-8">
+
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>记账小助手</title>
+
+  <title>分类开销记录</title>
+
   <style>
-:root {
-  --primary-color: #409EFF;
-  --success-color: #67C23A;
-  --warning-color: #E6A23C;
-  --danger-color: #F56C6C;
-  --text-color: #303133;
-  --bg-color: #f5f7fa;
-}
+    :root {
+
+      --primary-color: #409EFF;
+
+      --success-color: #67C23A;
+
+      --danger-color: #F56C6C;
+
+      --text-color: #303133;
+
+      --bg-color: #f5f7fa;
+
+    }
+
+
 
     body {
+
       font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen-Sans, Ubuntu, Cantarell, sans-serif;
+
       background-color: var(--bg-color);
+
       margin: 0;
+
       padding: 10px;
+
       color: var(--text-color);
+
       font-size: 14px;
+
     }
+
+
 
     .container {
+
       max-width: 600px;
+
       margin: 20px auto;
+
       background: white;
+
       padding: 20px;
+
       border-radius: 12px;
+
       box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+
     }
+
+
 
     h1 {
+
       text-align: center;
+
       color: var(--primary-color);
+
       margin: 0 0 20px;
+
       font-size: 24px;
+
       font-weight: 500;
+
     }
+
+
 
     .form-group {
+
       margin-bottom: 15px;
+
     }
+
+
 
     label {
+
       display: block;
+
       margin-bottom: 6px;
+
       color: #606266;
+
       font-size: 13px;
+
     }
 
-    input[type="date"],
-    input[type="number"],
+
+
     select,
+
     input[type="text"] {
+
       width: 100%;
+
       padding: 10px 12px;
+
       border: 1px solid #DCDFE6;
+
       border-radius: 6px;
+
       box-sizing: border-box;
+
       font-size: 14px;
+
       transition: border-color 0.2s;
+
       -webkit-appearance: none;
+
     }
 
-    input[type="date"]:focus,
-    input[type="number"]:focus,
-    select:focus,
-    input[type="text"]:focus {
+
+
+    select:focus {
+
       border-color: var(--primary-color);
+
       outline: none;
+
     }
+
+
 
     button {
+
       width: 100%;
+
       padding: 12px;
+
       border: none;
+
       border-radius: 6px;
+
       background-color: var(--primary-color);
+
       color: white;
+
       font-size: 14px;
+
       cursor: pointer;
+
       transition: opacity 0.2s;
+
     }
+
+
 
     button:active {
+
       opacity: 0.8;
+
     }
 
-    .export-button {
-      background-color: var(--success-color);
-      margin-bottom: 15px;
-    }
+
 
     .expenses {
+
       margin-top: 20px;
+
       background: #fafafa;
+
       border-radius: 8px;
+
       padding: 15px;
+
     }
+
+
 
     .expenses h2 {
+
       font-size: 16px;
+
       margin: 0 0 12px;
+
       color: #909399;
+
     }
+
+
 
     .expenses ul {
+
       list-style: none;
+
       padding: 0;
+
       margin: 0;
+
     }
+
+
 
     .expense-item {
+
       padding: 12px;
+
       background: white;
+
       margin-bottom: 8px;
+
       border-radius: 6px;
+
       display: flex;
+
       justify-content: space-between;
+
       align-items: center;
+
       box-shadow: 0 2px 4px rgba(0, 0, 0, 0.04);
+
     }
 
-    .expense-details {
-      flex: 1;
-      margin-right: 15px;
-    }
 
-    .expense-remark {
-      color: #909399;
-      font-size: 12px;
-      margin-top: 4px;
-    }
-
-    .expense-actions {
-      display: flex;
-      gap: 5px;
-    }
 
     .empty-tip {
+
       text-align: center;
+
       color: #909399;
+
       padding: 20px;
+
       font-size: 13px;
+
     }
 
-    .total-amount {
-      font-weight: bold;
-      margin-top: 10px;
-      color: var(--primary-color);
-    }
 
-    @media (max-width: 480px) {
-      .container {
-        margin: 10px;
-        padding: 15px;
-      }
-
-      h1 {
-        font-size: 20px;
-      }
-
-      button {
-        padding: 10px;
-      }
-    }
-
-    .modal-mask {
-      position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      background: rgba(0, 0, 0, 0.5);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      z-index: 999;
-    }
-
-    .modal-content {
-      background: white;
-      padding: 20px;
-      border-radius: 8px;
-      width: 90%;
-      max-width: 400px;
-    }
 
     .chart-container {
+
+      margin-top: 20px;
+
       height: 300px;
-      margin: 20px 0;
+
     }
 
-    .budget-warning {
-      color: var(--danger-color);
+
+
+    .total-amount {
+
       font-weight: bold;
-      padding: 10px;
-      background: #fee;
-      border-radius: 4px;
-      margin: 10px 0;
+
+      margin-top: 10px;
+
+      color: var(--primary-color);
+
     }
 
-    .editor-buttons {
+
+
+    .filter-buttons {
+
       display: flex;
-      gap: 10px;
-      margin-top: 15px;
+
+      justify-content: space-between;
+
+      margin: 10px 0;
+
     }
 
-    .editor-buttons button {
+
+
+    .filter-buttons button {
+
       flex: 1;
+
+      margin-right: 5px;
+
     }
 
-    .filter-group {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 10px;
-      margin: 15px 0;
+
+
+    .filter-buttons button:last-child {
+
+      margin-right: 0;
+
+    }
+
+
+
+    @media (max-width: 480px) {
+
+      .container {
+
+        margin: 10px;
+
+        padding: 15px;
+
+      }
+
+
+
+      h1 {
+
+        font-size: 20px;
+
+      }
+      button {
+
+        padding: 10px;
+
+      }
+    }
+    a {
+      text-decoration: none;
+      color: rgb(255, 255, 255);
     }
   </style>
+
 </head>
 
 <body>
+  <a href="note_account.html"><button>返回</button></a>
   <div id="app" class="container">
-    <h1>📈 智能记账助手</h1>
 
-    <!-- 预算设置 -->
-    <div class="form-group">
-      <label>本月预算 (¥)</label>
-      <input type="number" v-model="monthBudget" placeholder="输入月度预算">
-    </div>
+    <h1>分类开销记录</h1>
 
-    <!-- 添加/编辑表单 -->
+
+
     <div class="form-group">
-      <label>日期</label>
-      <input type="date" v-model="currentExpense.date">
-    </div>
-    <div class="form-group">
-      <label>金额 (¥)</label>
-      <input type="number" v-model.number="currentExpense.amount" step="0.01">
-    </div>
-    <div class="form-group">
-      <label>类别</label>
-      <select v-model="currentExpense.category">
+
+      <label for="category">选择类别</label>
+
+      <select id="category" v-model="selectedCategory" @change="updateRemarks">
+
+        <option value="">所有类别</option>
+
         <option value="餐饮">🍔 餐饮</option>
+
         <option value="购物">🛍️ 购物</option>
+
         <option value="交通">🚕 交通</option>
+
         <option value="娱乐">🎮 娱乐</option>
+
         <option value="其他">📦 其他</option>
+
       </select>
+
     </div>
+
+
+
     <div class="form-group">
-      <label>备注</label>
-      <input type="text" v-model="currentExpense.remark" placeholder="输入备注">
-    </div>
-    <button @click="saveExpense">保存记录</button>
 
-    <!-- 预算提醒 -->
-    <div v-if="showBudgetWarning" class="budget-warning">
-      ⚠️ 每日预算超支！建议控制消费
-    </div>
+      <label for="remark">选择备注</label>
 
-    <!-- 日期筛选 -->
-    <div class="filter-group">
-      <div class="form-group">
-        <label>开始日期</label>
-        <input type="date" v-model="filterStart">
-      </div>
-      <div class="form-group">
-        <label>结束日期</label>
-        <input type="date" v-model="filterEnd">
-      </div>
+      <select id="remark" v-model="selectedRemark">
+
+        <option value="">所有备注</option>
+
+        <option v-for="remark in uniqueRemarks" :key="remark" :value="remark">{{ remark }}</option>
+
+      </select>
+
     </div>
 
-    <!-- 图表展示 -->
-    <div class="chart-container">
-      <canvas ref="chart"></canvas>
+
+
+    <div class="form-group filter-buttons">
+
+      <button @click="filterByWeek">过去一周</button>
+
+      <button @click="filterByMonth">过去一个月</button>
+
+      <button @click="resetFilter">全部</button>
+
     </div>
 
-    <!-- 账单列表 -->
+
+
     <div class="expenses">
+
       <h2>开销记录</h2>
+
       <ul>
+
         <li v-for="(expense, index) in filteredExpenses" :key="index" class="expense-item">
-          <div class="expense-details">
-            <div class="expense-remark" v-if="expense.remark">{{ expense.remark }}</div>
+
+          <div>
+
             <div>{{ expense.date }} - {{ expense.category }}</div>
+
+            <div class="expense-remark" v-if="expense.remark">{{ expense.remark }}</div>
+
           </div>
+
           <div style="color: var(--primary-color)">¥{{ expense.amount.toFixed(2) }}</div>
-          <div class="expense-actions">
-            <button @click="editExpense(index)">编辑</button>
-            <button @click="deleteExpense(index)">删除</button>
-          </div>
+
         </li>
+
       </ul>
+
       <div v-if="filteredExpenses.length === 0" class="empty-tip">📭 暂无记录</div>
+
       <div class="total-amount">总金额: ¥{{ totalFilteredAmount.toFixed(2) }}</div>
+
     </div>
 
-    <button class="export-button" @click="exportExcel">导出Excel</button>
 
-    <!-- 编辑模态框 -->
-    <div class="modal-mask" v-if="showEditor">
-      <div class="modal-content">
-        <h3>编辑记录</h3>
-        <div class="form-group">
-          <label>日期</label>
-          <input type="date" v-model="editData.date">
-        </div>
-        <div class="form-group">
-          <label>金额 (¥)</label>
-          <input type="number" v-model.number="editData.amount" step="0.01">
-        </div>
-        <div class="form-group">
-          <label>类别</label>
-          <select v-model="editData.category">
-            <option value="餐饮">🍔 餐饮</option>
-            <option value="购物">🛍️ 购物</option>
-            <option value="交通">🚕 交通</option>
-            <option value="娱乐">🎮 娱乐</option>
-            <option value="其他">📦 其他</option>
-          </select>
-        </div>
-        <div class="form-group">
-          <label>备注</label>
-          <input type="text" v-model="editData.remark" placeholder="输入备注">
-        </div>
-        <div class="editor-buttons">
-          <button @click="updateExpense">保存</button>
-          <button @click="cancelEdit">取消</button>
-        </div>
-      </div>
+
+    <div class="chart-container">
+
+      <canvas id="expenseChart"></canvas>
+
     </div>
 
-    <button @click="goToCategoryExpenses">查看分类开销记录</button>
   </div>
 
+
+
   <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.16.9/xlsx.full.min.js"></script>
+
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
   <script>
     new Vue({
       el: '#app',
       data() {
-        const today = new Date().toISOString().slice(0, 10)
         return {
-          currentExpense: {
-            date: today,
-            amount: null,
-            category: '餐饮',
-            remark: ''
-          },
           expenses: JSON.parse(localStorage.getItem('expenses')) || [],
-          monthBudget: localStorage.getItem('monthBudget') || 0,
-          filterStart: '',
-          filterEnd: '',
-          showEditor: false,
-          editIndex: -1,
-          editData: {},
-          chartInstance: null
+          selectedCategory: '',
+          selectedRemark: '',
+          chart: null,
+          timeFilter: 'all' // 新增时间过滤状态
         }
       },
       computed: {
+        uniqueRemarks() {
+          if (!this.selectedCategory) return [];
+          return [...new Set(this.expenses
+            .filter(e => e.category === this.selectedCategory)
+            .map(e => e.remark)
+            .filter(Boolean))];
+        },
         filteredExpenses() {
-          return this.expenses.filter(expense => {
-            const date = new Date(expense.date)
-            const start = this.filterStart ? new Date(this.filterStart) : new Date(0)
-            const end = this.filterEnd ? new Date(this.filterEnd) : new Date()
-            return date >= start && date <= end
-          })
+          let filtered = this.expenses;
+
+          // 应用类别过滤
+          if (this.selectedCategory) {
+            filtered = filtered.filter(e => e.category === this.selectedCategory);
+          }
+
+          // 应用备注过滤
+          if (this.selectedRemark) {
+            filtered = filtered.filter(e => e.remark === this.selectedRemark);
+          }
+
+          // 应用时间过滤
+          const now = new Date();
+          switch (this.timeFilter) {
+            case 'week':
+              const weekAgo = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
+              filtered = filtered.filter(e => new Date(e.date) >= weekAgo);
+              break;
+            case 'month':
+              const monthAgo = new Date(now.getTime() - 30 * 24 * 60 * 60 * 1000);
+              filtered = filtered.filter(e => new Date(e.date) >= monthAgo);
+              break;
+          }
+
+          return filtered;
+        },
+        chartData() {
+          // 按日期分组聚合数据
+          const groupedData = this.filteredExpenses.reduce((acc, curr) => {
+            const date = curr.date;
+            acc[date] = (acc[date] || 0) + curr.amount;
+            return acc;
+          }, {});
+
+          return {
+            labels: Object.keys(groupedData).sort(),
+            datasets: [{
+              label: `${this.selectedCategory || '全部类别'}${this.selectedRemark ? ` - ${this.selectedRemark}` : ''}`,
+              data: Object.values(groupedData),
+              backgroundColor: 'rgba(64, 158, 255, 0.5)',
+              borderColor: 'rgba(64, 158, 255, 1)',
+              borderWidth: 1
+            }]
+          };
         },
         totalFilteredAmount() {
-          return this.filteredExpenses.reduce((sum, expense) => sum + expense.amount, 0);
-        },
-        monthlyData() {
-          const groups = {}
-          this.expenses.forEach(e => {
-            const month = e.date.slice(0, 7)
-            groups[month] = (groups[month] || 0) + e.amount
-          })
-          return groups
-        },
-        yearlyData() {
-          const groups = {}
-          this.expenses.forEach(e => {
-            const year = e.date.slice(0, 4)
-            groups[year] = (groups[year] || 0) + e.amount
-          })
-          return groups
-        },
-        dailyBudget() {
-          const daysInMonth = new Date().getDate()
-          const remainingDays = daysInMonth - new Date().getDate()
-          return ((this.monthBudget - this.currentMonthTotal) / remainingDays).toFixed(2)
-        },
-        currentMonthTotal() {
-          const currentMonth = new Date().toISOString().slice(0, 7)
-          return this.expenses
-            .filter(e => e.date.startsWith(currentMonth))
-            .reduce((sum, e) => sum + e.amount, 0)
-        },
-        showBudgetWarning() {
-          return this.dailyBudget < 0
+          return this.filteredExpenses.reduce((sum, e) => sum + e.amount, 0);
         }
       },
       methods: {
-        saveExpense() {
-          if (!this.currentExpense.amount || !this.currentExpense.date) {
-            alert('请填写完整信息');
-            return;
-          }
-
-          if (this.editIndex === -1) {
-            this.expenses.push({ ...this.currentExpense })
-          } else {
-            this.expenses.splice(this.editIndex, 1, { ...this.currentExpense })
-            this.editIndex = -1
-          }
-          this.resetForm()
-          this.saveToLocal()
+        updateRemarks() {
+          this.selectedRemark = '';
+          this.updateChart();
         },
-        editExpense(index) {
-          this.editIndex = index
-          this.editData = { ...this.expenses[index] }
-          this.showEditor = true
+        filterByWeek() {
+          this.timeFilter = 'week';
+          this.updateChart();
         },
-        updateExpense() {
-          this.expenses.splice(this.editIndex, 1, { ...this.editData })
-          this.showEditor = false
-          this.saveToLocal()
+        filterByMonth() {
+          this.timeFilter = 'month';
+          this.updateChart();
         },
-        cancelEdit() {
-          this.showEditor = false
+        resetFilter() {
+          this.timeFilter = 'all';
+          this.updateChart();
         },
-        deleteExpense(index) {
-          this.expenses.splice(index, 1)
-          this.saveToLocal()
-        },
-        exportExcel() {
-          const workbook = XLSX.utils.book_new()
+        updateChart() {
+          if (this.chart) this.chart.destroy();
 
-          // 详细数据
-          const ws1 = XLSX.utils.json_to_sheet(this.expenses.map(e => ({
-            日期: e.date,
-            类别: e.category,
-            金额: e.amount,
-            备注: e.remark
-          })))
-
-          // 月度数据
-          const monthly = Object.entries(this.monthlyData).map(([month, total]) => ({
-            月份: month,
-            总支出: total
-          }))
-          const ws2 = XLSX.utils.json_to_sheet(monthly)
-
-          // 年度数据
-          const yearly = Object.entries(this.yearlyData).map(([year, total]) => ({
-            年份: year,
-            总支出: total
-          }))
-          const ws3 = XLSX.utils.json_to_sheet(yearly)
-
-          XLSX.utils.book_append_sheet(workbook, ws1, '详细记录')
-          XLSX.utils.book_append_sheet(workbook, ws2, '月度汇总')
-          XLSX.utils.book_append_sheet(workbook, ws3, '年度汇总')
-          XLSX.writeFile(workbook, `账单数据_${new Date().toISOString().slice(0, 10)}.xlsx`)
-        },
-        initChart() {
-          if (this.chartInstance) this.chartInstance.destroy()
-
-          const ctx = this.$refs.chart.getContext('2d')
-          this.chartInstance = new Chart(ctx, {
-            type: 'line',
-            data: {
-              labels: Object.keys(this.monthlyData),
-              datasets: [{
-                label: '月度支出趋势',
-                data: Object.values(this.monthlyData),
-                borderColor: '#409EFF',
-                tension: 0.4,
-                fill: true
-              }]
+          const ctx = document.getElementById('expenseChart').getContext('2d');
+          this.chart = new Chart(ctx, {
+            type: 'bar', // 改为柱状图更清晰
+            data: this.chartData,
+            options: {
+              responsive: true,
+              scales: {
+                y: {
+                  beginAtZero: true,
+                  title: {
+                    display: true,
+                    text: '金额 (¥)'
+                  }
+                },
+                x: {
+                  title: {
+                    display: true,
+                    text: '日期'
+                  }
+                }
+              }
             }
-          })
-        },
-        validateExpense() {
-          return this.currentExpense.amount > 0 && this.currentExpense.date
-        },
-        resetForm() {
-          this.currentExpense = {
-            date: today,
-            amount: null,
-            category: '餐饮',
-            remark: ''
-          }
-        },
-        saveToLocal() {
-          localStorage.setItem('expenses', JSON.stringify(this.expenses))
-          this.initChart()
-        },
-        goToCategoryExpenses() {
-          window.location.href = 'test.html'; // 跳转到分类开销记录页面
+          });
         }
       },
       watch: {
-        expenses: {
-          handler() {
-            this.saveToLocal()
-          },
-          deep: true
-        },
-        monthBudget() {
-          localStorage.setItem('monthBudget', this.monthBudget)
+        filteredExpenses() {
+          this.updateChart();
         }
       },
       mounted() {
-        this.initChart()
+        this.updateChart();
       }
     })
   </script>
+
 </body>
+
 </html>
