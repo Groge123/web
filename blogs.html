@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QP博客</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue@2"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/matlab.min.js"></script>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f8f9fa;
+            color: #2c3e50;
+            line-height: 1.6;
+            padding: 20px 20px 20px 240px;
+        }
+
+        /* 目录样式 */
+        .directory {
+            position: fixed;
+            left: 20px;
+            top: 20px;
+            width: 200px;
+            background: #ffffff;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            padding: 15px;
+            max-height: 95vh;
+            overflow-y: auto;
+        }
+        .directory-title {
+            font-weight: 600;
+            color: #4a90e2;
+            padding-bottom: 10px;
+            margin-bottom: 10px;
+            border-bottom: 2px solid #eee;
+        }
+        .directory a {
+            display: block;
+            padding: 8px 12px;
+            margin: 4px 0;
+            color: #34495e;
+            border-radius: 6px;
+            transition: all 0.2s;
+            text-decoration: none;
+        }
+        .directory a:hover {
+            background: #f0f4f8;
+            transform: translateX(5px);
+        }
+
+        /* 内容区域 */
+        .content {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        h1 {
+            text-align: center;
+            color: #2c3e50;
+            margin-bottom: 40px;
+            font-size: 2.5em;
+            letter-spacing: 1px;
+        }
+
+        /* 卡片样式 */
+        .card {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            margin-bottom: 25px;
+            padding: 25px;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
+        }
+        h2 {
+            color: #4a90e2;
+            margin-bottom: 15px;
+            font-size: 1.8em;
+        }
+
+        /* 内容展开 */
+        .content-preview {
+            max-height: 100px;
+            overflow: hidden;
+            transition: max-height 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .content-full {
+            max-height: none;
+        }
+        .toggle-button {
+            display: inline-block;
+            margin-top: 15px;
+            color: #4a90e2;
+            cursor: pointer;
+            font-weight: 500;
+            transition: color 0.2s;
+        }
+        .toggle-button:hover {
+            color: #357abd;
+        }
+
+        /* 代码块样式 */
+        .code-block {
+            position: relative;
+            margin-top: 20px;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        pre {
+            margin: 0;
+            padding: 20px !important;
+            background: #1e1e1e !important;
+        }
+        .copy-button {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: rgba(255, 255, 255, 0.1);
+            color: #fff;
+            border: none;
+            padding: 6px 12px;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        .copy-button:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+        .feedback {
+            position: absolute;
+            top: 40px;
+            right: 10px;
+            color: #4CAF50;
+            font-size: 12px;
+            opacity: 0;
+            animation: fadeInOut 2s;
+        }
+
+        @keyframes fadeInOut {
+            0%,100% { opacity: 0 }
+            20%,80% { opacity: 1 }
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 50px;
+            color: #7f8c8d;
+            padding: 20px;
+        }
+    </style>
+</head>
+<body>
+    
+
+    <div id="app" class="content">
+        <div class="directory">
+            <div class="directory-title">目录</div>
+            <a v-for="post in posts" 
+               :key="post.id" 
+               @click.prevent="scrollToPost(post.id)"
+               :class="{ 'active': activePost === post.id }">
+               {{ post.title }}
+            </a>
+        </div>
+        <h1>{{ title }}</h1>
+        
+        <div v-for="post in posts" 
+             :key="post.id" 
+             class="card" 
+             :id="post.id">
+            <h2>{{ post.title }}</h2>
+            
+            <div :class="['content-preview', { 'content-full': post.isExpanded }]">
+                <p>{{ post.content }}</p>
+            </div>
+            
+            <span class="toggle-button" 
+                  @click="post.isExpanded = !post.isExpanded">
+                {{ post.isExpanded ? '收起内容' : '展开全文' }}
+            </span>
+
+            <div v-if="post.isExpanded" class="code-block">
+                <button class="copy-button" 
+                        @click="copyToClipboard(post.code, post)">
+                    复制代码
+                </button>
+                <pre><code class="hljs {{ post.language }}">{{ post.code }}</code></pre>
+                <div v-if="post.copyFeedback" class="feedback">
+                    {{ post.copyFeedback }}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <p>© 2025 QP博客 · 不积跬步无以至千里</p>
+    </footer>
+
+    <script>
+        hljs.configure({
+            languages: ['cpp','matlab', 'javascript'],
+            ignoreUnescapedHTML: true
+        });
+
+        new Vue({
+            el: '#app',
+            data: {
+                title: '技术博客',
+                activePost: null,
+                posts: [
+                    {
+                        id: 'post1',
+                        title: 'GA算法',
+                        content: '这是一个使用 MATLAB 实现的遗传算法示例。',
+                        language: 'language-matlab',
+                        code: `clc,clear
+lb=-2;%下限
+ub=4;%上限
+gen_num=10;%精度
+all_num=100;%种群数量
+P=randi([0,1],[all_num,gen_num]);%初始化种群
+f=@(x) -x.*cos(5*pi*x)+3.5;
+res=convert(lb,ub,P)
+[max_f,id]=max(f(res)); %最值
+max_gen=res(id);% 最值->自变量
+
+evol_num=100;%进化次数
+cross_rate=0.8;%交叉概率
+mute_rate=0.1;%变异概率
+
+best_fit=[max_gen];
+avg_fit=mean(f(res));
+
+myFigure('6',[200,200,1250,500])
+subplot(1,2,1)
+f_plt=ezplot(f,[lb,ub]);
+hold on
+dot_plt=scatter(res,f(res),'filled');
+max_plt=scatter(max_gen,max_f,'black','filled');
+legend('','个体','最优个体')
+
+subplot(1,2,2)
+best_fit_plt=plot(1:length(best_fit),best_fit,'b');
+hold on
+avg_fit_plt=plot(1:length(avg_fit),avg_fit,'r');
+
+for cur_num=1:evol_num
+    res=convert(lb,ub,P);
+    fitness=f(res);
+    best_fit=[best_fit,max(fitness)];
+    avg_fit=[avg_fit,mean(fitness)];
+
+    [current_max,current_id]=max(fitness);
+    best_individual = P(current_id,:);
+    %更新数据
+    [current_max,id]=max(fitness);
+    if current_max> max_f
+        max_f=current_max
+        max_gen=res(id);
+    end
+
+    set(dot_plt,'XData',res,'YData',fitness);
+    set(max_plt,'XData',max_gen,'YData',max_f);
+    title(sprintf('Generation %d: 当前最大f(x)=%.4f', cur_num, max_f));
+
+    set(best_fit_plt,'XData',1:length(best_fit),'YData',best_fit);
+    set(avg_fit_plt,'XData',1:length(avg_fit),'YData',avg_fit)
+
+    drawnow
+
+     % 轮盘赌选择
+    total_fit = sum(fitness);
+    if total_fit == 0
+        prob = ones(all_num,1)/all_num;
+    else
+        prob = fitness/total_fit;
+    end
+    cum_prob = cumsum(prob);
+    selected_indices = zeros(all_num,1);
+    for i = 1:all_num
+        r = rand();
+        idx = find(cum_prob >= r,1,'first');
+        if isempty(idx)
+            idx = all_num;
+        end
+        selected_indices(i) = idx;
+    end
+    P = P(selected_indices,:);
+    % 多点交叉
+    new_P = P;
+    for i = 1:2:all_num-1
+        if rand < cross_rate
+            % 交叉点数量（1-3个）
+            cross_points = sort(randperm(gen_num-1, randi(3)));
+            cross_points = [0 cross_points gen_num];
+            
+            child1 = [];
+            child2 = [];
+            for j = 1:length(cross_points)-1
+                if mod(j,2) == 1
+                    child1 = [child1 P(i,cross_points(j)+1:cross_points(j+1))];
+                    child2 = [child2 P(i+1,cross_points(j)+1:cross_points(j+1))];
+                else
+                    child1 = [child1 P(i+1,cross_points(j)+1:cross_points(j+1))];
+                    child2 = [child2 P(i,cross_points(j)+1:cross_points(j+1))];
+                end
+            end
+            
+            % 保优策略
+            c1_real = convert(lb,ub,child1);
+            c2_real = convert(lb,ub,child2);
+            if f(c1_real) < f(c2_real)
+                temp = child1;
+                child1 = child2;
+                child2 = temp;
+            end
+            
+            new_P(i,:) = child1;
+            new_P(i+1,:) = child2;
+        end
+    end
+    %变异
+    for i=1:all_num
+        if rand()<mute_rate*(1 - cur_num/evol_num) % 变异率逐渐降低mute_rate
+            mute_num=randi([1,gen_num]);
+            new_P(i,mute_num)=~new_P(i,mute_num);
+        end
+    end
+       % 精英保留
+    new_fitness = f(convert(lb,ub,new_P));
+    [~,worst_idx] = min(new_fitness);
+    new_P(worst_idx,:) = best_individual;
+    
+    P = new_P;
+end
+
+fprintf("最大点为(%f,%f)",max_gen,max_f)
+
+%进制转换
+function res=convert(lb,ub,num)
+temp=zeros(size(num,1),1);
+for i=1:size(num,2)
+    temp=temp+2^(i-1)*num(:,i);
+end
+
+res=lb+temp.*(ub-lb)./(2.^(size(num,2))-1);
+end`,
+                        isExpanded: false
+                    },
+                ]
+            },
+            methods: {
+                async copyToClipboard(code, post) {
+                    try {
+                        await navigator.clipboard.writeText(code);
+                        post.copyFeedback = '✓ 复制成功！';
+                        setTimeout(() => post.copyFeedback = '', 2000);
+                    } catch (err) {
+                        post.copyFeedback = '✗ 复制失败';
+                        setTimeout(() => post.copyFeedback = '', 2000);
+                    }
+                },
+                scrollToPost(id) {
+                    this.activePost = id;
+                    const element = document.getElementById(id);
+                    if (element) {
+                        const offset = 120;
+                        const topPos = element.offsetTop - offset;
+                        window.scrollTo({
+                            top: topPos,
+                            behavior: 'smooth'
+                        });
+                    }
+                }
+            },
+            updated() {
+                document.querySelectorAll('pre code').forEach(block => {
+                    hljs.highlightElement(block);
+                });
+            }
+        });
+    </script>
+</body>
+</html>
